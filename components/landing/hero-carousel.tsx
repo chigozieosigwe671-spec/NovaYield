@@ -173,14 +173,14 @@ export function HeroCarousel() {
 
       <button
         onClick={prev}
-        className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-white/10 backdrop-blur-md hover:bg-white/20 text-white transition-all hover:scale-110"
+        className="hidden absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-white/10 backdrop-blur-md hover:bg-white/20 text-white transition-all hover:scale-110"
         aria-label="Previous slide"
       >
         <ChevronLeft className="h-6 w-6" />
       </button>
       <button
         onClick={next}
-        className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-white/10 backdrop-blur-md hover:bg-white/20 text-white transition-all hover:scale-110"
+        className="hidden absolute right-2 md:right-6 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-white/10 backdrop-blur-md hover:bg-white/20 text-white transition-all hover:scale-110"
         aria-label="Next slide"
       >
         <ChevronRight className="h-6 w-6" />
