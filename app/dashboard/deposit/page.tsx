@@ -95,24 +95,29 @@ export default function DepositPage() {
         }
       }
 
-      const { error } = await supabase.from('deposits').insert({
-        user_id: user.id,
-        amount: amt,
-        payment_method_id: selectedMethod.id,
-        payment_method_name: selectedMethod.name,
-        receipt_url: receiptUrl,
-        status: 'pending',
-      });
+      const { data: deposit, error } = await supabase
+  .from('deposits')
+  .insert({
+    user_id: user.id,
+    amount: amt,
+    payment_method_id: selectedMethod.id,
+    payment_method_name: selectedMethod.name,
+    receipt_url: receiptUrl,
+    status: 'pending',
+  })
+  .select()
+  .single();
 
       if (error) throw error;
 
       await supabase.from('transactions').insert({
-        user_id: user.id,
-        type: 'deposit',
-        amount: amt,
-        status: 'pending',
-        description: `Deposit via ${selectedMethod.name}`,
-      });
+  user_id: user.id,
+  type: 'deposit',
+  amount: amt,
+  status: 'pending',
+  description: `Deposit via ${selectedMethod.name}`,
+  reference_id: deposit.id,
+});
 
       await supabase.from('notifications').insert({
         user_id: user.id,

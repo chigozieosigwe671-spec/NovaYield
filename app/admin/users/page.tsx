@@ -20,11 +20,17 @@ export default function AdminUsersPage() {
   const [selected, setSelected] = useState<any | null>(null);
   const [walletData, setWalletData] = useState<any | null>(null);
   const [adjustAmount, setAdjustAmount] = useState('');
+const fetchUsers = async () => {
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('*')
+    .order('created_at', { ascending: false });
 
-  const fetchUsers = async () => {
-    const { data } = await supabase.from('profiles').select('*').order('created_at', { ascending: false });
-    setUsers(data || []);
-  };
+  console.log('Profiles:', data);
+  console.log('Error:', error);
+
+  setUsers(data || []);
+};
 
   useEffect(() => { fetchUsers(); }, []);
 
@@ -97,6 +103,7 @@ export default function AdminUsersPage() {
       </div>
 
       <Card className="rounded-2xl p-6 card-shadow border-0">
+        <p className="mb-4">Total users: {users.length}</p>
         {filtered.length === 0 ? (
           <p className="text-center text-muted-foreground py-8">No users found.</p>
         ) : (

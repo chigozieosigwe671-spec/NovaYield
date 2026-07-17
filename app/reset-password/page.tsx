@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
@@ -15,8 +15,32 @@ import { supabase } from '@/lib/supabase/client';
 export default function ResetPasswordPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  console.log("Reset Password Page Loaded");
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+
+useEffect(() => {
+  const setupRecovery = async () => {
+    const url = new URL(window.location.href);
+
+    const code = url.searchParams.get("code");
+
+    if (code) {
+      const { data, error } = await supabase.auth.exchangeCodeForSession(code);
+
+      console.log("Exchange data:", data);
+      console.log("Exchange error:", error);
+    }
+
+    const { data: sessionData, error: sessionError } =
+      await supabase.auth.getSession();
+
+    console.log("SESSION:", sessionData);
+    console.log("SESSION ERROR:", sessionError);
+  };
+
+  setupRecovery();
+}, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,8 +57,16 @@ export default function ResetPasswordPage() {
     setLoading(true);
 
     try {
-      const { error } = await supabase.auth.updateUser({ password });
-      if (error) throw error;
+     console.log("Updating password...");
+
+const { data, error } = await supabase.auth.updateUser({
+  password,
+});
+
+console.log("Update data:", data);
+console.log("Update error:", error);
+
+if (error) throw error;
 
       toast.success('Password updated successfully!');
       router.push('/login');

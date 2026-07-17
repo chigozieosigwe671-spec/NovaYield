@@ -128,8 +128,27 @@ export default function DashboardPage() {
     };
 
     fetchData();
-    const interval = setInterval(fetchData, 30000);
-    return () => clearInterval(interval);
+
+const walletChannel = supabase
+  .channel('wallet-updates')
+  .on(
+    'postgres_changes',
+    {
+      event: 'UPDATE',
+      schema: 'public',
+      table: 'wallets',
+      filter: `user_id=eq.${user.id}`,
+    },
+    () => {
+      fetchData();
+      toast.success('Your wallet has been updated.');
+    }
+  )
+  .subscribe();
+
+return () => {
+  supabase.removeChannel(walletChannel);
+};
   }, [user]);
 
   const greeting = () => {

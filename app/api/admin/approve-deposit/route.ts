@@ -18,7 +18,17 @@ export async function POST(req: NextRequest) {
         { error: depositError.message },
         { status: 400 }
       );
-    }
+    } 
+    // Prevent approving the same deposit twice
+    if (deposit.status === 'approved') {
+     return NextResponse.json(
+    {
+      success: false,
+      error: 'This deposit has already been approved.',
+    },
+    { status: 400 }
+  );
+}
 
     // Step 3: Find the user's wallet
     const { data: wallet, error: walletError } = await adminSupabase
@@ -34,21 +44,16 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Step 4: Approve the deposit
-    const { error: approveError } = await adminSupabase
-      .from('deposits')
-      .update({
-        status: 'approved',
-        updated_at: new Date().toISOString(),
-      })
-      .eq('id', depositId);
-
-    if (approveError) {
-      return NextResponse.json(
-        { error: approveError.message },
-        { status: 400 }
-      );
-    }
+  // Step 4: Approve the deposit
+const { error: approveError } = await adminSupabase
+  .from('deposits')
+  .update({
+    status: 'approved',
+    processed: true,
+    approved_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  })
+  .eq('id', depositId);
 
     // Step 5: Credit the wallet
     const { error: walletUpdateError } = await adminSupabase
@@ -71,16 +76,17 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Step 6: Update the transaction
-    await adminSupabase
-      .from('transactions')
-      .update({
-        status: 'completed',
-      })
-      .eq('user_id', deposit.user_id)
-      .eq('type', 'deposit')
-      .eq('amount', deposit.amount);
+   // Step 6: Update the transaction
+const { data: txUpdate, error: txError } = await adminSupabase
+  .from('transactions')
+  .update({
+    status: 'completed',
+  })
+  .eq('reference_id', deposit.id)
+  .select();
 
+console.log('Transaction update:', txUpdate);
+console.log('Transaction error:', txError);
     // Step 7: Send notification
     await adminSupabase
       .from('notifications')
