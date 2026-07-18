@@ -197,7 +197,7 @@ export function HeroCarousel() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="font-display max-w-4xl text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-7 drop-shadow-lg"
+              className="font-display max-w-4xl text-4xl md:text-5xl lg:text-4xl font-bold text-white leading-tight mb-7 drop-shadow-lg"
             >
               {slides[current].title}
             </motion.h1>
@@ -205,7 +205,7 @@ export function HeroCarousel() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
-              className="text-lg md:text-xl !text-white/90 mb-10 max-w-2xl leading-relaxed text-pretty drop-shadow-md"
+              className="text-lg md:text-1xl !text-white/90 mb-10 max-w-2xl leading-relaxed text-pretty drop-shadow-md"
             >
               {slides[current].paragraph}
             </motion.p>

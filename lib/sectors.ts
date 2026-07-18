@@ -19,7 +19,7 @@ export const sectors: Sector[] = [
     title: 'Agriculture Investment',
     tagline: 'Sustainable Growth Through Smart Agriculture',
     heroImage: 'https://images.pexels.com/photos/2933243/pexels-photo-2933243.jpeg?auto=compress&cs=tinysrgb&w=1920',
-    featuredImage: 'https://images.pexels.com/photos/4407311/pexels-photo-4407311.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    featuredImage: 'https://i.pinimg.com/1200x/41/39/4a/41394a52cc66ae21f537fd11c78f1fd4.jpg',
     shortDesc: 'AI-driven agricultural investments designed for sustainable food production and long-term growth.',
     longDesc:
       'Agriculture has always been a cornerstone of human civilization — and today, it represents one of the most resilient investment opportunities available. At NovaYield, we apply artificial intelligence to identify high-yield agricultural projects across the globe, from precision farming operations in North America to sustainable agribusiness ventures in emerging markets. Our AI engine analyzes weather patterns, commodity prices, supply chain logistics, and regional regulations to select projects with the highest probability of consistent returns. By investing in agriculture through NovaYield, you are not only building wealth — you are contributing to global food security and sustainable farming practices that will feed generations to come.',
@@ -85,7 +85,7 @@ export const sectors: Sector[] = [
     title: 'Oil & Gas Investment',
     tagline: 'Powering Portfolios with Energy Investments',
     heroImage: 'https://images.pexels.com/photos/247763/pexels-photo-247763.jpeg?auto=compress&cs=tinysrgb&w=1920',
-    featuredImage: 'https://images.pexels.com/photos/247762/pexels-photo-247762.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    featuredImage: 'https://i.pinimg.com/736x/22/db/7b/22db7b673db17b81a4edcff868fbe569.jpg',
     shortDesc: 'High-performing energy investments backed by AI market intelligence and global infrastructure.',
     longDesc:
       'The energy sector remains one of the most profitable investment landscapes in the world, and NovaYield gives you AI-optimized access to it. Our artificial intelligence engine continuously analyzes geopolitical events, supply and demand dynamics, OPEC decisions, and infrastructure developments to identify the highest-yield oil and gas opportunities — from upstream exploration projects to midstream pipeline infrastructure and downstream refining operations. We partner with established energy operators across North America, the Middle East, and emerging African energy markets to provide investors with exposure to this high-yield sector while managing risk through AI-driven portfolio diversification.',

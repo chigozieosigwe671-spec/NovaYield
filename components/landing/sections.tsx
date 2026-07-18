@@ -100,15 +100,7 @@ const stats = [
   { value: 25, suffix: '+', prefix: '', label: 'Countries Served' },
 ];
 
-const processSteps = [
-  { icon: UserPlus, title: 'Create Account', desc: 'Register in minutes with a secure, streamlined signup process designed to get you invested faster.' },
-  { icon: ShieldCheck, title: 'Verify Identity', desc: 'Complete our quick KYC verification to unlock full platform access and secure your account.' },
-  { icon: Wallet, title: 'Deposit Funds', desc: 'Fund your account using USDT, Bitcoin, Ethereum, or bank transfer — all within a secure wallet.' },
-  { icon: Target, title: 'Choose Investment Plan', desc: 'Select from AI-optimized plans tailored to your goals, risk appetite, and investment horizon.' },
-  { icon: Cpu, title: 'AI Portfolio Management', desc: 'Our AI engine continuously rebalances and optimizes your portfolio for maximum returns.' },
-  { icon: TrendingUp, title: 'Earn Daily Profits', desc: 'Watch your profits accrue daily — transparent, trackable, and credited automatically to your balance.' },
-  { icon: ArrowUpRight, title: 'Withdraw Earnings', desc: 'Cash out your profits anytime through your preferred payment method with fast, reliable processing.' },
-];
+
 
 function AnimatedCounter({ value, prefix, suffix }: { value: number; prefix: string; suffix: string }) {
   const [count, setCount] = useState(0);
@@ -152,13 +144,13 @@ export function AboutSection() {
             transition={{ duration: 0.7 }}
           >
             <p className="text-red-brand font-semibold text-sm tracking-[0.2em] mb-4">ABOUT NOVAYIELD</p>
-            <h2 className="font-display text-4xl md:text-5xl font-bold text-navy dark:text-white mb-7 text-balance">
+            <h2 className="font-display text-4xl md:text-4xl font-bold text-navy dark:text-white mb-7 text-balance">
               Sustainable Strategy Based on AI
             </h2>
-            <p className="text-muted-foreground text-lg mb-5 leading-relaxed text-pretty">
+            <p className="text-muted-foreground text-md mb-5 leading-relaxed text-pretty">
               At NovaYield, we are at the forefront of the investment landscape, leveraging the unparalleled capabilities of artificial intelligence to drive success. With a focus on agriculture, oil and gas, as well as gold and precious metal mining, we empower investors to unlock transformative opportunities for growth and profitability.
             </p>
-            <p className="text-muted-foreground text-lg leading-relaxed text-pretty">
+            <p className="text-muted-foreground text-md leading-relaxed text-pretty">
               Our AI algorithms harness the power of big data, enabling us to analyze market trends, identify emerging sectors, and make data-driven investment decisions that deliver exceptional results.
             </p>
 
@@ -255,10 +247,10 @@ export function ServicesSection() {
           className="text-center mb-16"
         >
           <p className="text-red-brand font-semibold text-sm tracking-[0.2em] mb-4">EXCELLENT SERVICES</p>
-          <h2 className="font-display text-4xl md:text-5xl font-bold text-navy dark:text-white text-balance mb-5">
+          <h2 className="font-display text-4xl md:text-5xl lg:text-4xl font-bold text-navy dark:text-white text-balance mb-5">
             Sectors of Interest
           </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto text-pretty">
+          <p className="text-muted-foreground text-md max-w-2xl mx-auto text-pretty">
             Explore our diversified portfolio of AI-optimized investment sectors, each carefully selected to deliver sustainable returns and long-term growth.
           </p>
         </motion.div>
@@ -285,7 +277,7 @@ export function ServicesSection() {
                     <Badge className="absolute top-4 right-4 bg-white/90 text-navy backdrop-blur-md text-xs font-semibold px-3 py-1.5">
                       {sector.tag}
                     </Badge>
-                    <h3 className="absolute bottom-4 left-5 text-2xl font-bold text-white">
+                    <h3 className="absolute bottom-4 left-5 text-1.5xl font-bold text-white">
                       {sector.title}
                     </h3>
                   </div>
@@ -319,10 +311,10 @@ export function WhyChooseSection() {
           className="text-center mb-16"
         >
           <p className="text-red-brand font-semibold text-sm tracking-[0.2em] mb-4">WHY CHOOSE US</p>
-          <h2 className="font-display text-4xl md:text-5xl font-bold text-navy dark:text-white text-balance mb-5">
+          <h2 className="font-display text-4xl md:text-5xl lg:text-4xl font-bold text-navy dark:text-white text-balance mb-5">
             Why Choose NovaYield
           </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto text-pretty">
+          <p className="text-muted-foreground text-md max-w-2xl mx-auto text-pretty">
             We combine cutting-edge AI technology with decades of investment expertise to deliver a platform that puts your financial success first.
           </p>
         </motion.div>
@@ -343,63 +335,11 @@ export function WhyChooseSection() {
                     <item.icon className="h-7 w-7 text-red-brand" />
                   </div>
                   <h3 className="text-xl font-bold text-navy dark:text-white mb-2">{item.title}</h3>
-                  <p className="text-muted-foreground text-[15px] leading-relaxed text-pretty">{item.desc}</p>
+                  <p className="text-muted-foreground text-[14px] leading-relaxed text-pretty">{item.desc}</p>
                 </div>
               </Card>
             </motion.div>
           ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-export function ProcessSection() {
-  return (
-    <section id="process" className="py-24 md:py-32 bg-muted/30 relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
-          <p className="text-red-brand font-semibold text-sm tracking-[0.2em] mb-4">OUR WORK PROCESS</p>
-          <h2 className="font-display text-4xl md:text-5xl font-bold text-navy dark:text-white text-balance mb-5">
-            Your Path to Financial Freedom
-          </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto text-pretty">
-            A simple, transparent seven-step journey from account creation to withdrawing your earnings — powered by AI at every stage.
-          </p>
-        </motion.div>
-
-        <div className="relative">
-          {/* Connecting line */}
-          <div className="hidden lg:block absolute top-12 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-4">
-            {processSteps.map((step, i) => (
-              <motion.div
-                key={step.title}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1, duration: 0.5 }}
-                className="relative"
-              >
-                <Card className="group h-full rounded-3xl p-7 card-shadow hover:card-shadow-hover transition-all duration-500 hover:-translate-y-2 border-0 bg-white dark:bg-card text-center relative overflow-hidden">
-                  <div className="absolute top-4 right-5 text-5xl font-bold text-muted/30 select-none">
-                    {String(i + 1).padStart(2, '0')}
-                  </div>
-                  <div className="relative inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-navy to-navy-light text-white mb-5 group-hover:scale-110 transition-transform shadow-lg">
-                    <step.icon className="h-8 w-8 text-red-brand" />
-                  </div>
-                  <h3 className="text-lg font-bold text-navy dark:text-white mb-2">{step.title}</h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed text-pretty">{step.desc}</p>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
         </div>
       </div>
     </section>
@@ -418,10 +358,10 @@ export function VideoSection() {
           className="text-center mb-12"
         >
           <p className="text-red-brand font-semibold text-sm tracking-[0.2em] mb-4">WATCH & LEARN</p>
-          <h2 className="font-display text-4xl md:text-5xl font-bold text-navy dark:text-white text-balance mb-5">
+          <h2 className="font-display text-4xl md:text-5xl lg:text-4xl font-bold text-navy dark:text-white text-balance mb-5">
             Build Your Financial Future With Smart Investments
           </h2>
-          <p className="text-muted-foreground text-lg max-w-3xl mx-auto text-pretty">
+          <p className="text-muted-foreground text-md max-w-3xl mx-auto text-pretty">
             Discover how NovaYield combines artificial intelligence with time-tested investment strategies to help you build long-term wealth, achieve financial freedom, and create passive income streams that last.
           </p>
         </motion.div>
@@ -487,7 +427,7 @@ export function StatsSection() {
               transition={{ delay: i * 0.1 }}
               className="text-center"
             >
-              <div className="font-display text-3xl md:text-3xl font-bold text-white mb-3">
+              <div className="font-display text-3xl md:text-2xl font-bold text-white mb-3">
                 <AnimatedCounter value={stat.value} prefix={stat.prefix} suffix={stat.suffix} />
               </div>
               <p className="text-white/70 text-base md:text-lg">{stat.label}</p>
@@ -515,10 +455,10 @@ export function CtaSection() {
           </div>
           <div className="absolute inset-0 bg-grid opacity-[0.04]" />
           <div className="relative">
-            <h2 className="font-display text-3xl md:text-5xl font-bold text-white mb-6 text-balance">
+            <h2 className="font-display text-4xl md:text-5xl lg:text-4xl font-bold text-white mb-6 text-balance">
               Ready to Grow Your Wealth with <span className="text-red-brand">AI</span>?
             </h2>
-            <p className="text-white text-lg md:text-xl mb-10 max-w-2xl mx-auto text-pretty">
+            <p className="text-white/70 text-md md:text-1xl mb-10 max-w-2xl mx-auto text-pretty">
               Join thousands of investors who are already earning daily profits through NovaYield's AI-powered investment platform. Register today and start your journey toward financial freedom.
             </p>
             <div className="flex flex-wrap gap-4 justify-center">

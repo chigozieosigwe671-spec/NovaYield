@@ -44,10 +44,10 @@ export function PlansSection() {
           className="text-center mb-16"
         >
           <p className="text-red-brand font-semibold text-sm tracking-[0.2em] mb-4">INVESTMENT PLANS</p>
-          <h2 className="font-display text-4xl md:text-5xl font-bold text-navy dark:text-white text-balance mb-5">
+          <h2 className="font-display text-4xl md:text-5xl lg:text-4xl font-bold text-navy dark:text-white text-balance mb-5">
             Choose Your Investment Plan
           </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto text-pretty">
+          <p className="text-muted-foreground text-md max-w-2xl mx-auto text-pretty">
             Select a plan that suits your investment goals. All plans include AI-optimized daily returns and full withdrawal flexibility.
           </p>
         </motion.div>
@@ -160,7 +160,7 @@ export function TestimonialsSection() {
           className="text-center mb-16"
         >
           <p className="text-red-brand font-semibold text-sm tracking-[0.2em] mb-4">TESTIMONIALS</p>
-          <h2 className="font-display text-4xl md:text-5xl font-bold text-navy dark:text-white text-balance">
+          <h2 className="font-display text-4xl md:text-5xl lg:text-4xl font-bold text-navy dark:text-white text-balance">
             What Our Investors Say
           </h2>
         </motion.div>
@@ -171,7 +171,7 @@ export function TestimonialsSection() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="bg-white dark:bg-card rounded-3xl p-10 md:p-14 card-shadow-lg relative"
+            className="bg-white dark:bg-card rounded-3xl p-5 md:p-11 card-shadow-lg relative"
           >
             <Quote className="absolute top-8 left-8 h-16 w-16 text-red-brand/10" />
             <div className="relative">
@@ -180,7 +180,7 @@ export function TestimonialsSection() {
                   <Star key={i} className="h-6 w-6 fill-yellow-400 text-yellow-400" />
                 ))}
               </div>
-              <p className="font-display text-xl md:text-2xl text-navy dark:text-white text-center mb-10 leading-relaxed italic text-pretty">
+              <p className="font-display text-md md:text-1.6xl text-navy dark:text-white text-center mb-10 leading-relaxed italic text-pretty">
                 "{testimonials[current].content}"
               </p>
               <div className="flex items-center justify-center gap-4">
@@ -243,7 +243,7 @@ export function FaqSection() {
           className="text-center mb-16"
         >
           <p className="text-red-brand font-semibold text-sm tracking-[0.2em] mb-4">FAQ</p>
-          <h2 className="font-display text-4xl md:text-5xl font-bold text-navy dark:text-white text-balance">
+          <h2 className="font-display text-4xl md:text-5xl lg:text-4xl font-bold text-navy dark:text-white text-balance">
             Frequently Asked Questions
           </h2>
         </motion.div>
