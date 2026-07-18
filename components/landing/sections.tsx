@@ -473,7 +473,7 @@ export function StatsSection() {
           className="text-center mb-16"
         >
           <p className="text-red-brand font-semibold text-sm tracking-[0.2em] mb-4">BY THE NUMBERS</p>
-          <h2 className="font-display text-4xl md:text-5xl font-bold text-white text-balance">
+          <h2 className="font-display text-3xl md:text-3xl  text-white text-balance">
             Trusted by Investors Worldwide
           </h2>
         </motion.div>
@@ -487,7 +487,7 @@ export function StatsSection() {
               transition={{ delay: i * 0.1 }}
               className="text-center"
             >
-              <div className="font-display text-5xl md:text-6xl font-bold text-white mb-3">
+              <div className="font-display text-3xl md:text-3xl font-bold text-white mb-3">
                 <AnimatedCounter value={stat.value} prefix={stat.prefix} suffix={stat.suffix} />
               </div>
               <p className="text-white/70 text-base md:text-lg">{stat.label}</p>
