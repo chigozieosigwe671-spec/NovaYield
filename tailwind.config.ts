@@ -73,7 +73,8 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
+        sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
+        display: ['var(--font-display)', 'Georgia', 'serif'],
       },
       keyframes: {
         'accordion-down': {
@@ -112,6 +113,18 @@ const config: Config = {
           '0%, 100%': { boxShadow: '0 0 20px -5px hsl(0 84% 50% / 0.4)' },
           '50%': { boxShadow: '0 0 30px -5px hsl(0 84% 50% / 0.6)' },
         },
+        'marquee': {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-50%)' },
+        },
+        'gradient-x': {
+          '0%, 100%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
+        },
+        'shine': {
+          '0%': { transform: 'translateX(-100%)' },
+          '100%': { transform: 'translateX(200%)' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -123,6 +136,9 @@ const config: Config = {
         'shimmer': 'shimmer 2s linear infinite',
         'float': 'float 3s ease-in-out infinite',
         'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
+        'marquee': 'marquee 30s linear infinite',
+        'gradient-x': 'gradient-x 6s ease infinite',
+        'shine': 'shine 3s ease-in-out infinite',
       },
     },
   },

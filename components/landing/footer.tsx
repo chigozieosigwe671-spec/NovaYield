@@ -1,14 +1,21 @@
 'use client';
 
 import Link from 'next/link';
-import { TrendingUp, Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Instagram, Youtube } from 'lucide-react';
+import { Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Instagram, Youtube } from 'lucide-react';
+import { Logo } from './logo';
 
 const footerLinks = {
   Company: [
-    { label: 'About', href: '/#about' },
-    { label: 'Services', href: '/#services' },
+    { label: 'About Us', href: '/#about' },
+    { label: 'Sectors', href: '/#services' },
+    { label: 'Our Process', href: '/#process' },
     { label: 'Investment Plans', href: '/#plans' },
-    { label: 'Contact', href: '/#contact' },
+  ],
+  Sectors: [
+    { label: 'Agriculture', href: '/sectors/agriculture' },
+    { label: 'Real Estate', href: '/sectors/real-estate' },
+    { label: 'Oil & Gas', href: '/sectors/oil-gas' },
+    { label: 'Gold Mining', href: '/sectors/gold-mining' },
   ],
   Legal: [
     { label: 'Terms & Conditions', href: '/terms' },
@@ -32,19 +39,17 @@ const socialIcons = [
 
 export function Footer() {
   return (
-    <footer className="bg-navy-dark text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8">
-          <div className="col-span-2">
-            <Link href="/" className="flex items-center gap-2 mb-4">
-              <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-white/10">
-                <TrendingUp className="h-6 w-6 text-red-brand" />
-              </div>
-              <span className="text-xl font-bold">
-                Nova<span className="text-red-brand">Yield</span>
-              </span>
-            </Link>
-            <p className="text-white/60 text-sm leading-relaxed max-w-sm mb-6">
+    <footer className="bg-navy-dark text-white relative overflow-hidden">
+      <div className="absolute inset-0 bg-grid opacity-[0.03]" />
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-red-brand/5 rounded-full blur-3xl" />
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-10">
+          <div className="col-span-2 lg:col-span-2">
+            <div className="mb-5">
+              <Logo scrolled={false} size="lg" />
+            </div>
+            <p className="text-white/60 text-base leading-relaxed max-w-sm mb-6 text-pretty">
               Harnessing the power of artificial intelligence for sustainable and profitable investments across agriculture, oil & gas, real estate, and gold mining.
             </p>
             <div className="flex gap-3">
@@ -52,7 +57,7 @@ export function Footer() {
                 <a
                   key={i}
                   href={social.href}
-                  className="flex items-center justify-center w-10 h-10 rounded-lg bg-white/10 hover:bg-red-brand transition-colors"
+                  className="flex items-center justify-center w-11 h-11 rounded-xl bg-white/10 hover:bg-red-brand transition-all hover:scale-110"
                   aria-label="Social link"
                 >
                   <social.icon className="h-5 w-5" />
@@ -63,13 +68,13 @@ export function Footer() {
 
           {Object.entries(footerLinks).map(([title, links]) => (
             <div key={title}>
-              <h3 className="font-semibold text-white mb-4">{title}</h3>
-              <ul className="space-y-3">
+              <h3 className="font-bold text-white mb-5 text-lg">{title}</h3>
+              <ul className="space-y-3.5">
                 {links.map((link) => (
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      className="text-white/60 text-sm hover:text-red-brand transition-colors"
+                      className="text-white/60 text-[15px] hover:text-red-brand transition-colors"
                     >
                       {link.label}
                     </Link>
@@ -79,30 +84,31 @@ export function Footer() {
             </div>
           ))}
 
-          <div>
-            <h3 className="font-semibold text-white mb-4">Contact</h3>
-            <ul className="space-y-3">
-              <li className="flex items-center gap-2 text-white/60 text-sm">
-                <Mail className="h-4 w-4 text-red-brand" />
+          <div className="col-span-2 lg:col-span-1">
+            <h3 className="font-bold text-white mb-5 text-lg">Contact</h3>
+            <ul className="space-y-3.5">
+              <li className="flex items-start gap-3 text-white/60 text-[15px]">
+                <Mail className="h-5 w-5 text-red-brand flex-shrink-0 mt-0.5" />
                 support@novayield.com
               </li>
-              <li className="flex items-center gap-2 text-white/60 text-sm">
-                <Phone className="h-4 w-4 text-red-brand" />
+              <li className="flex items-start gap-3 text-white/60 text-[15px]">
+                <Phone className="h-5 w-5 text-red-brand flex-shrink-0 mt-0.5" />
                 +1 (800) 555-0199
               </li>
-              <li className="flex items-center gap-2 text-white/60 text-sm">
-                <MapPin className="h-4 w-4 text-red-brand" />
+              <li className="flex items-start gap-3 text-white/60 text-[15px]">
+                <MapPin className="h-5 w-5 text-red-brand flex-shrink-0 mt-0.5" />
                 Global Operations
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="border-t border-white/10 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div className="border-t border-white/10 mt-16 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-white/50 text-sm">
             © {new Date().getFullYear()} NovaYield. All rights reserved.
           </p>
-          <p className="text-white/50 text-sm">
+          <p className="text-white/50 text-sm flex items-center gap-2">
+            <span className="h-2 w-2 rounded-full bg-green-400 animate-pulse" />
             AI-Powered Investment Platform
           </p>
         </div>
