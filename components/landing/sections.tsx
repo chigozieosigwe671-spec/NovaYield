@@ -239,18 +239,18 @@ export function AboutSection() {
 export function ServicesSection() {
   return (
     <section id="services" className="py-24 md:py-32 bg-muted/30 relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-left lg:text-center mb-16"
         >
-          <p className="text-red-brand font-semibold text-sm tracking-[0.2em] mb-4">EXCELLENT SERVICES</p>
-          <h2 className="font-display text-4xl md:text-5xl lg:text-4xl font-bold text-navy dark:text-white text-balance mb-5">
+          <p className="text-red-brand font-semibold text-sm tracking-[0.2em] mb-4  ">EXCELLENT SERVICES</p>
+          <h2 className=" font-display text-4xl md:text-5xl lg:text-4xl font-bold text-navy dark:text-white text-balance mb-5">
             Sectors of Interest
           </h2>
-          <p className="text-muted-foreground text-md max-w-2xl mx-auto text-pretty">
+          <p className="text-muted-foreground text-md max-w-2xl mx-auto text-pretty ">
             Explore our diversified portfolio of AI-optimized investment sectors, each carefully selected to deliver sustainable returns and long-term growth.
           </p>
         </motion.div>
@@ -308,10 +308,10 @@ export function WhyChooseSection() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-left lg:text-center mb-16"
         >
-          <p className="text-red-brand font-semibold text-sm tracking-[0.2em] mb-4">WHY CHOOSE US</p>
-          <h2 className="font-display text-4xl md:text-5xl lg:text-4xl font-bold text-navy dark:text-white text-balance mb-5">
+          <p className="text-red-brand font-semibold text-sm tracking-[0.2em] mb-4 ">WHY CHOOSE US</p>
+          <h2 className="font-display text-3xl md:text-5xl lg:text-4xl font-bold text-navy dark:text-white text-balance mb-5">
             Why Choose NovaYield
           </h2>
           <p className="text-muted-foreground text-md max-w-2xl mx-auto text-pretty">
@@ -357,11 +357,11 @@ export function VideoSection() {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <p className="text-red-brand font-semibold text-sm tracking-[0.2em] mb-4">WATCH & LEARN</p>
-          <h2 className="font-display text-4xl md:text-5xl lg:text-4xl font-bold text-navy dark:text-white text-balance mb-5">
+          <p className="text-red-brand font-semibold text-sm tracking-[0.2em] mb-4 text-left lg:text-left">WATCH & LEARN</p>
+          <h2 className="text-left lg:text-left font-display text-4xl md:text-5xl lg:text-4xl font-bold text-navy dark:text-white text-balance mb-5">
             Build Your Financial Future With Smart Investments
           </h2>
-          <p className="text-muted-foreground text-md max-w-3xl mx-auto text-pretty">
+          <p className="text-muted-foreground text-md max-w-3xl mx-auto text-pretty text-left lg:text-left">
             Discover how NovaYield combines artificial intelligence with time-tested investment strategies to help you build long-term wealth, achieve financial freedom, and create passive income streams that last.
           </p>
         </motion.div>
@@ -417,7 +417,7 @@ export function StatsSection() {
             Trusted by Investors Worldwide
           </h2>
         </motion.div>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {stats.map((stat, i) => (
             <motion.div
               key={stat.label}
@@ -447,7 +447,7 @@ export function CtaSection() {
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
-          className="relative rounded-[2rem] gradient-navy overflow-hidden p-12 md:p-20 text-center card-shadow-lg"
+          className="relative rounded-[2rem] gradient-navy overflow-hidden p-12 md:p-20 text-left lg:text-center card-shadow-lg"
         >
           <div className="absolute inset-0 opacity-10">
             <div className="absolute top-0 right-0 w-80 h-80 bg-red-brand rounded-full blur-3xl" />
@@ -455,7 +455,7 @@ export function CtaSection() {
           </div>
           <div className="absolute inset-0 bg-grid opacity-[0.04]" />
           <div className="relative">
-            <h2 className="font-display text-4xl md:text-5xl lg:text-4xl font-bold text-white mb-6 text-balance">
+            <h2 className="font-display text-2xl md:text-5xl lg:text-4xl font-bold text-white mb-6 text-balance">
               Ready to Grow Your Wealth with <span className="text-red-brand">AI</span>?
             </h2>
             <p className="text-white/70 text-md md:text-1xl mb-10 max-w-2xl mx-auto text-pretty">

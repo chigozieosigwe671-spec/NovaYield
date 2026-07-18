@@ -23,13 +23,13 @@ const slides: Slide[] = [
     badge: 'AI-POWERED INVESTMENTS',
     title: (
       <>
-        Harnessing the Power of AI for{' '}
-        <span className="text-red-brand">Sustainable and Profitable</span>{' '}
-        Investments
+        AI-Powered Investments{' '}
+        <span className="text-red-brand">for Sustainable</span>{' '}
+         Growth   
       </>
     ),
     paragraph:
-      'NovaYield utilizes cutting-edge AI technology to identify and engage in high-potential ventures in agriculture, oil and gas, as well as gold and precious metal mining — building wealth that lasts generations.',
+      'NovaYield leverages advanced AI to identify high-potential opportunities in agriculture, oil & gas, and precious metals—delivering smart, sustainable, and long-term returns.',
     primaryBtn: 'Get Started',
     primaryHref: '/register',
     secondaryBtn: 'Login',
@@ -42,8 +42,8 @@ const slides: Slide[] = [
     badge: 'AGRICULTURE INVESTMENT',
     title: (
       <>
-        Cultivating <span className="text-red-brand">Sustainable Growth</span>{' '}
-        Through Smart Agriculture
+        Grow <span className="text-red-brand">Wealth Through</span>{' '}
+        Smart Agriculture
       </>
     ),
     paragraph:
@@ -193,11 +193,29 @@ export function HeroCarousel() {
               </span>
               {slides[current].badge}
             </motion.p>
-            <motion.h1
+              <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="font-display max-w-4xl text-4xl md:text-5xl lg:text-4xl font-bold text-white leading-tight mb-7 drop-shadow-lg"
+              className="
+                font-display
+                text-[1.9rem]
+                sm:text-[2.3rem]
+                md:text-5xl
+                lg:text-6xl
+                xl:text-7xl
+                font-bold
+                text-white
+                leading-tight
+                sm:leading-tight
+                md:leading-[1.1]
+                mb-5
+                sm:mb-6
+                md:mb-8
+                max-w-[300px]
+                sm:max-w-[520px]
+                md:max-w-3xl
+              "
             >
               {slides[current].title}
             </motion.h1>
@@ -213,12 +231,31 @@ export function HeroCarousel() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
-              className="flex flex-wrap gap-4"
+              className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto"
             >
               <Link href={slides[current].primaryHref}>
                 <Button
-                  size="lg"
-                  className="bg-red-brand hover:bg-red-dark text-white px-8 py-6 text-base font-semibold rounded-full shadow-2xl shadow-red-500/30 hover:shadow-red-500/50 transition-all hover:scale-105 group"
+                 size="lg"
+                    className="
+                      w-full
+                      sm:w-auto
+                      bg-red-brand
+                      hover:bg-red-dark
+                      text-white
+                      h-12
+                      sm:h-14
+                      px-6
+                      sm:px-8
+                      text-sm
+                      sm:text-base
+                      font-semibold
+                      rounded-full
+                      shadow-2xl
+                      shadow-red-500/30
+                      hover:shadow-red-500/50
+                      transition-all
+                      hover:scale-105
+                      group"
                 >
                   {slides[current].primaryBtn}
                   <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
@@ -226,9 +263,27 @@ export function HeroCarousel() {
               </Link>
               <Link href={slides[current].secondaryHref}>
                 <Button
-                  size="lg"
-                  variant="outline"
-                  className="glass text-white border-white/30 hover:bg-white/15 px-8 py-6 text-base font-semibold rounded-full transition-all hover:scale-105 group"
+                              size="lg"
+                variant="outline"
+                className="
+                  w-full
+                  sm:w-auto
+                  glass
+                  text-white
+                  border-white/30
+                  hover:bg-white/15
+                  h-12
+                  sm:h-14
+                  px-6
+                  sm:px-8
+                  text-sm
+                  sm:text-base
+                  font-semibold
+                  rounded-full
+                  transition-all
+                  hover:scale-105
+                  group
+                "
                 >
                   <Play className="mr-2 h-5 w-5" />
                   {slides[current].secondaryBtn}

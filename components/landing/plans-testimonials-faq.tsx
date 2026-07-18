@@ -41,7 +41,7 @@ export function PlansSection() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-left lg:text-center mb-16"
         >
           <p className="text-red-brand font-semibold text-sm tracking-[0.2em] mb-4">INVESTMENT PLANS</p>
           <h2 className="font-display text-4xl md:text-5xl lg:text-4xl font-bold text-navy dark:text-white text-balance mb-5">
@@ -160,7 +160,7 @@ export function TestimonialsSection() {
           className="text-center mb-16"
         >
           <p className="text-red-brand font-semibold text-sm tracking-[0.2em] mb-4">TESTIMONIALS</p>
-          <h2 className="font-display text-4xl md:text-5xl lg:text-4xl font-bold text-navy dark:text-white text-balance">
+          <h2 className="font-display text-3xl md:text-5xl lg:text-4xl font-bold text-navy dark:text-white text-balance">
             What Our Investors Say
           </h2>
         </motion.div>
@@ -240,7 +240,7 @@ export function FaqSection() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-left lg:text-center mb-16"
         >
           <p className="text-red-brand font-semibold text-sm tracking-[0.2em] mb-4">FAQ</p>
           <h2 className="font-display text-4xl md:text-5xl lg:text-4xl font-bold text-navy dark:text-white text-balance">
