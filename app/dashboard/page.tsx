@@ -88,6 +88,7 @@ export default function DashboardPage() {
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [dismissed, setDismissed] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
+  const [monthlyData, setMonthlyData] = useState<any[]>([]);
   const [stats, setStats] = useState({
     activeInvestments: 0,
     completedInvestments: 0,
@@ -124,6 +125,13 @@ export default function DashboardPage() {
         referralEarnings: comm?.filter((c: any) => c.status === 'paid').reduce((sum: number, c: any) => sum + Number(c.amount), 0) || 0,
       });
 
+       const chartRes = await fetch(
+        `/api/dashboard/charts?userId=${user.id}`
+      );
+
+      const chart = await chartRes.json();
+
+      setMonthlyData(chart);
       setLoading(false);
     };
 
@@ -165,24 +173,11 @@ return () => {
     }
   };
 
-  // Chart data
-  const walletGrowthData = [
-    { name: 'Jan', value: wallet?.total_deposits ? Number(wallet.total_deposits) * 0.3 : 0 },
-    { name: 'Feb', value: wallet?.total_deposits ? Number(wallet.total_deposits) * 0.5 : 0 },
-    { name: 'Mar', value: wallet?.total_deposits ? Number(wallet.total_deposits) * 0.65 : 0 },
-    { name: 'Apr', value: wallet?.total_deposits ? Number(wallet.total_deposits) * 0.75 : 0 },
-    { name: 'May', value: wallet?.total_deposits ? Number(wallet.total_deposits) * 0.85 : 0 },
-    { name: 'Jun', value: wallet?.total_deposits ? Number(wallet.total_deposits) : 0 },
-  ];
+    const walletGrowthData = monthlyData.map((item: any) => ({
+      name: item.name,
+      value: item.deposits,
+    }));
 
-  const monthlyData = [
-    { name: 'Jan', deposits: 4200, withdrawals: 1200 },
-    { name: 'Feb', deposits: 3800, withdrawals: 1900 },
-    { name: 'Mar', deposits: 5200, withdrawals: 2300 },
-    { name: 'Apr', deposits: 4780, withdrawals: 1600 },
-    { name: 'May', deposits: 6890, withdrawals: 3100 },
-    { name: 'Jun', deposits: 5390, withdrawals: 2400 },
-  ];
 
   const portfolioData = [
     { name: 'Main Balance', value: wallet ? Number(wallet.main_balance) : 0, color: 'hsl(222 47% 18%)' },

@@ -89,7 +89,7 @@ export function Footer() {
             <ul className="space-y-3.5">
               <li className="flex items-start gap-3 text-white/60 text-[15px]">
                 <Mail className="h-5 w-5 text-red-brand flex-shrink-0 mt-0.5" />
-                support@novayield.com
+                novayieldhelp@gmail.com
               </li>
               <li className="flex items-start gap-3 text-white/60 text-[15px]">
                 <Phone className="h-5 w-5 text-red-brand flex-shrink-0 mt-0.5" />

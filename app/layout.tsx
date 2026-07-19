@@ -24,15 +24,27 @@ export const metadata: Metadata = {
     'NovaYield harnesses the power of artificial intelligence to identify high-potential ventures in agriculture, oil & gas, real estate, and gold & precious metal mining.',
   keywords: ['AI investment', 'investment platform', 'agriculture investment', 'oil and gas', 'gold mining', 'crypto investment'],
   icons: {
-    icon: '/favicon.svg',
-    shortcut: '/favicon.svg',
-    apple: '/favicon.svg',
+    icon: '/icon.svg',
+    shortcut: '/icon.svg',
+    apple: '/icon.svg',
   },
   openGraph: {
     title: 'NovaYield — AI-Powered Investments',
     description: 'Harnessing the power of AI for sustainable and profitable investments.',
     type: 'website',
-  },
+     images: [
+    {
+      url: "/og-image.jpg",
+      width: 1200,
+      height: 630,
+      alt: "NovaYield",
+    },
+  ],
+  }, 
+  twitter: {
+  card: "summary_large_image",
+  images: ["/og-image.jpg"],
+},
 };
 
 export default function RootLayout({

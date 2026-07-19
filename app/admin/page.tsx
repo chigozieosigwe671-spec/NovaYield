@@ -12,52 +12,67 @@ import {
 } from 'recharts';
 
 export default function AdminOverview() {
-  const [stats, setStats] = useState({
-    totalUsers: 0,
-    totalDeposits: 0,
-    pendingDeposits: 0,
-    totalWithdrawals: 0,
-    pendingWithdrawals: 0,
-    activeInvestments: 0,
-    openTickets: 0,
-    totalDepositAmount: 0,
-    totalWithdrawalAmount: 0,
-  });
-  const [recentUsers, setRecentUsers] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+const [stats, setStats] = useState({
+  totalUsers: 0,
+  totalDeposits: 0,
+  pendingDeposits: 0,
+  totalWithdrawals: 0,
+  pendingWithdrawals: 0,
+  activeInvestments: 0,
+  openTickets: 0,
+  totalDepositAmount: 0,
+  totalWithdrawalAmount: 0,
+});
 
-  useEffect(() => {
-    const fetchStats = async () => {
-      const [users, deposits, withdrawals, investments, tickets, recent] = await Promise.all([
-        supabase.from('profiles').select('id', { count: 'exact', head: true }),
-        supabase.from('deposits').select('amount, status'),
-        supabase.from('withdrawals').select('amount, status'),
-        supabase.from('investments').select('id', { count: 'exact', head: true }).eq('status', 'active'),
-        supabase.from('support_tickets').select('id', { count: 'exact', head: true }).eq('status', 'open'),
-        supabase.from('profiles').select('*').order('created_at', { ascending: false }).limit(5),
-      ]);
+const [recentUsers, setRecentUsers] = useState<any[]>([]);
+const [loading, setLoading] = useState(true);
+const [chartData, setChartData] = useState<any[]>([]);
+const [recentDeposits, setRecentDeposits] = useState<any[]>([]);
+const [recentWithdrawals, setRecentWithdrawals] = useState<any[]>([]);
+const [recentInvestments, setRecentInvestments] = useState<any[]>([]);
 
-      const dep = deposits.data || [];
-      const wd = withdrawals.data || [];
+useEffect(() => {
+  const fetchStats = async () => {
+    try {
+      const res = await fetch("/api/admin/stats");
+      const data = await res.json();
 
       setStats({
-        totalUsers: users.count || 0,
-        totalDeposits: dep.length,
-        pendingDeposits: dep.filter((d: any) => d.status === 'pending').length,
-        totalWithdrawals: wd.length,
-        pendingWithdrawals: wd.filter((w: any) => w.status === 'pending').length,
-        activeInvestments: investments.count || 0,
-        openTickets: tickets.count || 0,
-        totalDepositAmount: dep.filter((d: any) => d.status === 'approved').reduce((s: number, d: any) => s + Number(d.amount), 0),
-        totalWithdrawalAmount: wd.filter((w: any) => w.status === 'completed' || w.status === 'approved').reduce((s: number, w: any) => s + Number(w.amount), 0),
+        totalUsers: data.totalUsers ?? 0,
+        totalDeposits: data.totalDeposits ?? 0,
+        pendingDeposits: data.pendingDeposits ?? 0,
+        totalWithdrawals: data.totalWithdrawals ?? 0,
+        pendingWithdrawals: data.pendingWithdrawals ?? 0,
+        activeInvestments: data.activeInvestments ?? 0,
+        openTickets: data.openTickets ?? 0,
+        totalDepositAmount: data.totalDepositAmount ?? 0,
+        totalWithdrawalAmount: data.totalWithdrawalAmount ?? 0,
       });
-      setRecentUsers(recent.data || []);
+
+      setChartData(data.chartData || []);
+      setRecentDeposits(data.recentDeposits || []);
+      setRecentWithdrawals(data.recentWithdrawals || []);
+      setRecentInvestments(data.recentInvestments || []);
+
+      const { data: recentUsers } = await supabase
+        .from("profiles")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(5);
+
+      setRecentUsers(recentUsers || []);
       setLoading(false);
-    };
-    fetchStats();
-    const interval = setInterval(fetchStats, 30000);
-    return () => clearInterval(interval);
-  }, []);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  fetchStats();
+
+  const interval = setInterval(fetchStats, 30000);
+
+  return () => clearInterval(interval);
+}, []);
 
   const statCards = [
     { label: 'Total Users', value: stats.totalUsers, icon: Users, color: 'text-blue-600 bg-blue-50' },
@@ -70,14 +85,7 @@ export default function AdminOverview() {
     { label: 'Total Activity', value: stats.totalUsers + stats.totalDeposits + stats.totalWithdrawals, icon: Activity, color: 'text-teal-600 bg-teal-50' },
   ];
 
-  const chartData = [
-    { name: 'Jan', deposits: 42000, withdrawals: 12000, users: 120 },
-    { name: 'Feb', deposits: 38000, withdrawals: 19000, users: 180 },
-    { name: 'Mar', deposits: 52000, withdrawals: 23000, users: 250 },
-    { name: 'Apr', deposits: 47000, withdrawals: 16000, users: 310 },
-    { name: 'May', deposits: 68000, withdrawals: 31000, users: 420 },
-    { name: 'Jun', deposits: 53000, withdrawals: 24000, users: 510 },
-  ];
+
 
   if (loading) {
     return <div className="space-y-4">{[...Array(4)].map((_, i) => <div key={i} className="h-32 rounded-2xl bg-muted animate-pulse" />)}</div>;
@@ -121,7 +129,7 @@ export default function AdminOverview() {
         </Card>
 
         <Card className="rounded-2xl p-6 card-shadow border-0">
-          <h3 className="font-bold text-navy dark:text-white mb-4">User Growth</h3>
+          <h3 className="font-bold text-navy dark:text-white mb-4">Deposit Growth</h3>
           <ResponsiveContainer width="100%" height={250}>
             <AreaChart data={chartData}>
               <defs>
@@ -134,7 +142,7 @@ export default function AdminOverview() {
               <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={12} />
               <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} />
               <Tooltip contentStyle={{ borderRadius: '12px' }} />
-              <Area type="monotone" dataKey="users" stroke="hsl(222 47% 18%)" fill="url(#colorUsers)" strokeWidth={2} />
+              <Area type="monotone" dataKey="deposits" stroke="hsl(222 47% 18%)" fill="url(#colorUsers)" strokeWidth={2} />
             </AreaChart>
           </ResponsiveContainer>
         </Card>
@@ -172,6 +180,50 @@ export default function AdminOverview() {
             </table>
           </div>
         )}
+      </Card>
+      <Card className="rounded-2xl p-6 card-shadow border-0 mt-6">
+        <h3 className="font-bold text-navy dark:text-white mb-4">
+          Recent Activity
+        </h3>
+
+        <div className="space-y-3">
+          {[
+            ...recentDeposits.map((d: any) => ({
+              text: `Deposit of $${Number(d.amount).toLocaleString()} received`,
+              date: new Date(d.created_at).toLocaleString(),
+              color: "text-green-600",
+            })),
+            ...recentWithdrawals.map((w: any) => ({
+              text: `Withdrawal request of $${Number(w.amount).toLocaleString()}`,
+              date: new Date(w.created_at).toLocaleString(),
+              color: "text-red-600",
+            })),
+            ...recentInvestments.map((i: any) => ({
+              text: `New investment of $${Number(i.amount).toLocaleString()}`,
+              date: new Date(i.created_at).toLocaleString(),
+              color: "text-blue-600",
+            })),
+          ]
+            .sort(
+              (a, b) =>
+                new Date(b.date).getTime() - new Date(a.date).getTime()
+            )
+            .slice(0, 10)
+            .map((activity, index) => (
+              <div
+                key={index}
+                className="flex items-center justify-between border-b pb-2"
+              >
+                <span className={`font-medium ${activity.color}`}>
+                  {activity.text}
+                </span>
+
+                <span className="text-xs text-muted-foreground">
+                  {activity.date}
+                </span>
+              </div>
+            ))}
+        </div>
       </Card>
     </div>
   );

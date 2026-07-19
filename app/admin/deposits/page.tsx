@@ -21,6 +21,7 @@ export default function AdminDepositsPage() {
   const [statusFilter, setStatusFilter] = useState('all');
   const [selectedDeposit, setSelectedDeposit] = useState<any | null>(null);
   const [remarks, setRemarks] = useState('');
+  const [action, setAction] = useState<'approve' | 'reject' | null>(null);
   const [loading, setLoading] = useState(false);
 
   const fetchDeposits = async () => {
@@ -68,46 +69,80 @@ export default function AdminDepositsPage() {
    await fetchDeposits();
 
     } catch (err: any) {
-      toast.error(err.message || 'Failed to approve deposit');
+
+  console.error(err);
+
+  toast.error(err.message || "Failed to reject withdrawal");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleReject = async (deposit: any) => {
-    setLoading(true);
-    try {
-      const { error } = await supabase.from('deposits').update({
-        status: 'rejected',
-        admin_remarks: remarks || 'Rejected by admin',
-        updated_at: new Date().toISOString(),
-      }).eq('id', deposit.id);
+const handleReject = async (d: any) => {
+  setLoading(true);
 
-      if (error) throw error;
+  try { 
+    const { data: check, error: checkError } = await supabase
+  .from("deposits")
+  .select("id, status")
+  .eq("id", d.id);
 
-      await supabase.from('transactions').update({ status: 'failed' })
-        .eq('user_id', deposit.user_id)
-        .eq('type', 'deposit')
-        .eq('amount', deposit.amount)
-        .eq('status', 'pending');
+    console.log("Check:", check);
+    console.log("Check Error:", checkError);
+    console.log("Deposit ID:", d.id);
+    console.log("Full deposit object:", d);
+    // Reject the deposit
+    const { data, error } = await supabase
+  .from("deposits")
+  .update({
+    status: "rejected",
+    admin_remarks: remarks || "Rejected by admin",
+    updated_at: new Date().toISOString(),
+  })
+  .eq("id", d.id)
+  .select();
 
-      await supabase.from('notifications').insert({
-        user_id: deposit.user_id,
-        title: 'Deposit Rejected',
-        message: `Your deposit of $${deposit.amount} was rejected. Reason: ${remarks || 'Please contact support for details.'}`,
-        type: 'deposit',
-      });
+    console.log("Updated deposit:", data);
+    console.log("Update error:", error);
+    
 
-      toast.success('Deposit rejected');
-      setSelectedDeposit(null);
-      setRemarks('');
-      fetchDeposits();
-    } catch (err: any) {
-      toast.error(err.message || 'Failed to reject deposit');
-    } finally {
-      setLoading(false);
-    }
-  };
+    if (error) throw error;
+
+    // Update the transaction
+    const { error: transError } = await supabase
+      .from("transactions")
+      .update({
+        status: "failed",
+      })
+      .eq("user_id", d.user_id)
+      .eq("type", "deposit")
+      .eq("status", "pending");
+
+    if (transError) throw transError;
+
+    // Optional notification
+    /*
+    await supabase.from("notifications").insert({
+      user_id: d.user_id,
+      title: "Deposit Rejected",
+      message: `Your deposit of $${d.amount} was rejected.`,
+      type: "deposit",
+    });
+    */
+
+    toast.success("Deposit rejected successfully.");
+
+    setSelectedDeposit(null);
+    setRemarks("");
+
+    fetchDeposits();
+  } catch (err: any) {
+    console.error(err);
+    toast.error(err.message || "Failed to reject deposit");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="space-y-6">

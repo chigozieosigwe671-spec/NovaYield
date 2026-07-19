@@ -26,6 +26,7 @@ export default function WithdrawPage() {
   const [wallet, setWallet] = useState<Wallet | null>(null);
   const [methods, setMethods] = useState<PaymentMethod[]>([]);
   const [withdrawals, setWithdrawals] = useState<any[]>([]);
+  const [completedPlans, setCompletedPlans] = useState(0);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedMethod, setSelectedMethod] = useState<PaymentMethod | null>(null);
   const [formData, setFormData] = useState({
@@ -52,16 +53,34 @@ export default function WithdrawPage() {
       ]);
     });
     supabase.from('withdrawals').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(10).then(({ data }) => setWithdrawals(data || []));
+    supabase
+      .from("investments")
+      .select("*", { count: "exact", head: true })
+      .eq("user_id", user.id)
+      .eq("status", "completed")
+      .then(({ count }) => {
+        setCompletedPlans(count || 0);
+      });
   }, [user]);
 
   const availableBalance = wallet ? Number(wallet.main_balance) + Number(wallet.profit_balance) : 0;
   const accountBalance = wallet ? Number(wallet.main_balance) : 0;
   const profitBalance = wallet ? Number(wallet.profit_balance) : 0;
   const bonusBalance = wallet ? Number(wallet.bonus_balance) : 0;
+  const withdrawalsLocked = completedPlans < 3;
 
   const handleSubmit = async () => {
     if (!user || !selectedMethod) return;
     const amt = parseFloat(formData.amount);
+          // Prevent withdrawals until 3 completed plans
+      if (completedPlans < 3) {
+        toast.error(
+          `Withdrawals are locked. Complete ${
+            3 - completedPlans
+          } more investment plan(s) to unlock withdrawals.`
+        );
+        return;
+      }
 
     if (amt < selectedMethod.min_amount || amt > selectedMethod.max_amount) {
       toast.error(`Amount must be between $${selectedMethod.min_amount} and $${selectedMethod.max_amount}`);
@@ -159,7 +178,22 @@ export default function WithdrawPage() {
           </Card>
         ))}
       </div>
+            {withdrawalsLocked && (
+            <Card className="rounded-2xl border border-amber-300 bg-amber-50 p-6">
+              <h3 className="text-lg font-bold text-amber-700">
+                🔒 Withdrawals Locked
+              </h3>
 
+              <p className="mt-2 text-sm text-amber-700">
+                Withdrawals will become available after you successfully complete
+                <strong> 3 investment plans.</strong>
+              </p>
+
+              <p className="mt-4 font-semibold">
+                Completed Plans: {completedPlans}/3
+              </p>
+            </Card>
+        )}
       {/* Withdrawal Methods */}
       <div>
         <h3 className="font-bold text-navy dark:text-white mb-4">Withdrawal Methods</h3>
@@ -184,10 +218,10 @@ export default function WithdrawPage() {
                 <Dialog open={dialogOpen && selectedMethod?.id === m.id} onOpenChange={(open) => { if (!open) setSelectedMethod(null); setDialogOpen(open); }}>
                   <DialogTrigger asChild>
                     <Button
-                      onClick={() => setSelectedMethod(m)}
-                      className="w-full bg-navy hover:bg-navy-light text-white rounded-xl"
-                    >
-                      Request Withdrawal
+                          disabled={withdrawalsLocked}
+                          onClick={() => setSelectedMethod(m)}
+                          className="w-full bg-navy hover:bg-navy-light text-white rounded-xl">
+                           {withdrawalsLocked ? "Withdrawals Locked" : "Request Withdrawal"}
                     </Button>
                   </DialogTrigger>
                   <DialogContent className="rounded-2xl">

@@ -24,12 +24,33 @@ export function SupportWidget() {
     setLoading(true);
 
     try {
-      const { error } = await supabase.from('support_tickets').insert({
-        user_id: user.id,
-        subject,
-        message,
-        status: 'open',
-        priority: 'normal',
+    // Save ticket in Supabase
+      const { error } = await supabase
+        .from("support_tickets")
+        .insert({
+          user_id: user.id,
+          subject,
+          message,
+          status: "open",
+          priority: "normal",
+        });
+
+      if (error) throw error;
+
+      // Send email
+      await fetch("/api/support", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name:
+            `${user.user_metadata?.first_name ?? ""} ${user.user_metadata?.last_name ?? ""}`.trim() ||
+            "NovaYield User",
+          email: user.email,
+          subject,
+          message,
+        }),
       });
 
       if (error) throw error;
@@ -99,8 +120,8 @@ export function SupportWidget() {
               <div className="mb-4 p-3 bg-muted/50 rounded-xl">
                 <p className="text-sm text-muted-foreground">
                   Email us at{' '}
-                  <a href="mailto:support@novayield.com" className="text-red-brand font-semibold">
-                    support@novayield.com
+                  <a href="mailto:novayieldhelp@gmail.com" className="text-red-brand font-semibold">
+                    novayieldhelp@gmail.com
                   </a>
                 </p>
               </div>
