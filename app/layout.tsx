@@ -19,6 +19,7 @@ const sora = Sora({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://novayield.netlify.app"),
   title: 'NovaYield — AI-Powered Investments for Sustainable Wealth',
   description:
     'NovaYield harnesses the power of artificial intelligence to identify high-potential ventures in agriculture, oil & gas, real estate, and gold & precious metal mining.',
@@ -34,7 +35,7 @@ export const metadata: Metadata = {
     type: 'website',
      images: [
     {
-      url: "/og-image.jpg",
+      url: "/og-image.jpg?v=2",
       width: 1200,
       height: 630,
       alt: "NovaYield",
@@ -43,7 +44,10 @@ export const metadata: Metadata = {
   }, 
   twitter: {
   card: "summary_large_image",
-  images: ["/og-image.jpg"],
+   title: "NovaYield — AI-Powered Investments",
+    description:
+      "Harnessing the power of AI for sustainable and profitable investments.",
+    images: ["/og-image.jpg?v=2"],
 },
 };
 
@@ -54,9 +58,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-      </head>
+     
       <body className={`${jakarta.variable} ${sora.variable} font-sans`} suppressHydrationWarning>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
           <AuthProvider>
