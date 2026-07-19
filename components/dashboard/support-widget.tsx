@@ -37,22 +37,6 @@ export function SupportWidget() {
 
       if (error) throw error;
 
-      // Send email
-      await fetch("/api/support", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name:
-            `${user.user_metadata?.first_name ?? ""} ${user.user_metadata?.last_name ?? ""}`.trim() ||
-            "NovaYield User",
-          email: user.email,
-          subject,
-          message,
-        }),
-      });
-
       if (error) throw error;
 
       await supabase.from('activity_logs').insert({
