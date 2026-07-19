@@ -104,7 +104,7 @@ Deno.serve(async (req: Request) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          from: "NovaYield <noreply@novayield.com>",
+          from: "NovaYield <onboarding@resend.dev>",
           to: [to],
           subject: template.subject,
           html: template.html,
