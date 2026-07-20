@@ -86,22 +86,65 @@ export default function RegisterPage() {
           user_id: data.user.id,
         });
 
-        // Create referral record
-        if (referrerId) {
-          await supabase.from('referrals').insert({
+          if (referrerId) {
+          // Create referral
+          await supabase.from("referrals").insert({
             referrer_id: referrerId,
             referred_id: data.user.id,
             level: 1,
-            status: 'pending',
+            status: "pending",
           });
-          await supabase.from('referral_logs').insert({
+
+          // Log referral
+          await supabase.from("referral_logs").insert({
             referrer_id: referrerId,
             referred_id: data.user.id,
-            action: 'referral_registered',
+            action: "referral_registered",
             details: `New user registered with referral code ${formData.referralCode}`,
           });
-        }
 
+          // Credit referrer's wallet
+          const { data: referrerWallet } = await supabase
+            .from("wallets")
+            .select("*")
+            .eq("user_id", referrerId)
+            .single();
+
+          if (referrerWallet) {
+            await supabase
+              .from("wallets")
+              .update({
+                bonus_balance: Number(referrerWallet.bonus_balance || 0) + 5,
+                referral_balance: Number(referrerWallet.referral_balance || 0) + 5,
+                updated_at: new Date().toISOString(),
+              })
+              .eq("user_id", referrerId);
+          }
+
+          // Update profile earnings
+          const { data: referrerProfile } = await supabase
+            .from("profiles")
+            .select("referral_earnings")
+            .eq("id", referrerId)
+            .single();
+
+          await supabase
+            .from("profiles")
+            .update({
+              referral_earnings:
+                Number(referrerProfile?.referral_earnings || 0) + 5,
+            })
+            .eq("id", referrerId);
+
+          // Mark referral as rewarded
+             await supabase
+            .from("referrals")
+            .update({
+              status: "rewarded",
+            })
+            .eq("referred_id", data.user.id);
+        }
+         
         // Log activity
         await supabase.from('activity_logs').insert({
           user_id: data.user.id,

@@ -59,8 +59,20 @@ Deno.serve(async (req: Request) => {
         html: `<h1>Investment Completed!</h1><p>Your investment has completed. Total profit earned: <strong>$${data?.totalProfit || 0}</strong></p>`,
       },
       support_ticket: {
-        subject: "Support Ticket Received",
-        html: `<h1>Support Ticket Received</h1><p>We have received your ticket: "${data?.subject || ''}". Our team will get back to you soon.</p>`,
+        subject: `New Support Ticket - ${data?.subject}`,
+        html: `
+        <h2>New Support Ticket</h2>
+
+        <p><strong>Name:</strong> ${data?.name}</p>
+
+        <p><strong>Email:</strong> ${data?.email}</p>
+
+        <p><strong>Subject:</strong> ${data?.subject}</p>
+
+        <p><strong>Message:</strong></p>
+
+        <p>${data?.message}</p>
+      `,
       },
       support_reply: {
         subject: "Support Reply",

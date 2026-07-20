@@ -30,13 +30,19 @@ export default function LoginPage() {
 
       if (error) throw error;
 
-      // Log activity
-      if (data.user) {
-        await supabase.from('activity_logs').insert({
-          user_id: data.user.id,
-          action: 'user_login',
-          details: 'User logged in successfully',
-        });
+          // Log activity
+          if (data.user) {
+        const { error: logError } = await supabase
+          .from("activity_logs")
+          .insert({
+            user_id: data.user.id,
+            action: "user_login",
+            details: "User logged in successfully",
+          });
+
+        if (logError) {
+          console.error("Activity Log Error:", logError);
+        }
       }
 
       toast.success('Welcome back!');

@@ -24,10 +24,13 @@ export default function AdminSupportPage() {
   const [loading, setLoading] = useState(false);
 
   const fetchTickets = async () => {
-    const { data } = await supabase
-      .from('support_tickets')
-      .select('*, user:profiles!support_tickets_user_id_fkey(email, first_name, last_name)')
-      .order('created_at', { ascending: false });
+    const { data, error } = await supabase
+      .from("support_tickets")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    console.log(data, error);
+
     setTickets(data || []);
   };
 
@@ -114,7 +117,7 @@ export default function AdminSupportPage() {
               <tbody>
                 {filtered.map((t) => (
                   <motion.tr key={t.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="border-b border-border/50">
-                    <td className="py-3 text-sm text-navy dark:text-white">{t.user?.email}</td>
+                    <td className="py-3 text-sm text-navy dark:text-white">{t.user_id}</td>
                     <td className="py-3 text-sm font-medium text-navy dark:text-white">{t.subject}</td>
                     <td className="py-3">
                       <Badge className={t.priority === 'urgent' ? 'bg-red-100 text-red-700' : t.priority === 'high' ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-700'}>
@@ -146,7 +149,7 @@ export default function AdminSupportPage() {
           {selected && (
             <div className="space-y-4">
               <div className="p-4 bg-muted/30 rounded-xl">
-                <p className="text-xs text-muted-foreground mb-1">{selected.user?.email} • {new Date(selected.created_at).toLocaleString()}</p>
+                <p className="text-xs text-muted-foreground mb-1">{selected.user_id} • {new Date(selected.created_at).toLocaleString()}</p>
                 <p className="text-sm text-navy dark:text-white">{selected.message}</p>
               </div>
 

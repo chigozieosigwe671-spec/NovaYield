@@ -35,9 +35,27 @@ export function SupportWidget() {
           priority: "normal",
         });
 
-      if (error) throw error;
+        if (error) throw error;
 
-      if (error) throw error;
+            // Send email through Supabase Edge Function
+            const { error: emailError } = await supabase.functions.invoke("send-email", {
+          body: {
+          type: "support_ticket",
+          to: "novayieldhelp@gmail.com",
+          data: {
+            subject,
+            message,
+            name:
+              `${user.user_metadata?.first_name ?? ""} ${user.user_metadata?.last_name ?? ""}`.trim() ||
+              "NovaYield User",
+            email: user.email,
+          },
+        },
+      });
+
+      if (emailError) {
+        console.error(emailError);
+      }
 
       await supabase.from('activity_logs').insert({
         user_id: user.id,

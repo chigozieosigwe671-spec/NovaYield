@@ -75,6 +75,80 @@ const { error: approveError } = await adminSupabase
         { status: 400 }
       );
     }
+    // Step 5.5 - Pay referral bonus on first approved deposit
+    const { count } = await adminSupabase
+      .from("deposits")
+      .select("*", { count: "exact", head: true })
+      .eq("user_id", deposit.user_id)
+      .eq("status", "approved");
+
+    if (count === 1) {
+      const { data: referral } = await adminSupabase
+        .from("referrals")
+        .select("*")
+        .eq("referred_id", deposit.user_id)
+        .eq("status", "pending")
+        .maybeSingle();
+
+      if (referral) {
+        const { data: referrerWallet } = await adminSupabase
+          .from("wallets")
+          .select("*")
+          .eq("user_id", referral.referrer_id)
+          .single();
+
+        if (referrerWallet) {
+          await adminSupabase
+            .from("wallets")
+            .update({
+              bonus_balance:
+                Number(referrerWallet.bonus_balance || 0) + 5,
+              updated_at: new Date().toISOString(),
+            })
+            .eq("user_id", referral.referrer_id);
+        }
+      // Increase referral earnings
+      const { data: referrerProfile } = await adminSupabase
+        .from("profiles")
+        .select("referral_earnings")
+        .eq("id", referral.referrer_id)
+        .single();
+
+      await adminSupabase
+        .from("profiles")
+        .update({
+          referral_earnings:
+            Number(referrerProfile?.referral_earnings || 0) + 5,
+        })
+      .eq("id", referral.referrer_id);
+        await adminSupabase
+          .from("referrals")
+          .update({
+            status: "rewarded",
+            qualified: true,
+          })
+          .eq("id", referral.id);
+
+        await adminSupabase
+          .from("notifications")
+          .insert({
+            user_id: referral.referrer_id,
+            title: "Referral Bonus",
+            message:
+              "Congratulations! You earned a $5 referral bonus because your referral made their first approved deposit.",
+            type: "referral",
+          });
+
+        await adminSupabase
+          .from("activity_logs")
+          .insert({
+            user_id: referral.referrer_id,
+            action: "referral_bonus_paid",
+            details: "$5 referral bonus credited.",
+          });
+      }
+    }
+
 
    // Step 6: Update the transaction
 const { data: txUpdate, error: txError } = await adminSupabase
