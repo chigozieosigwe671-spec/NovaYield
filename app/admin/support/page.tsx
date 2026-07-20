@@ -61,7 +61,7 @@ export default function AdminSupportPage() {
       await supabase.from('notifications').insert({
         user_id: selected.user_id,
         title: 'Support Reply',
-        message: `Admin replied to your ticket: "${selected.subject}"`,
+        message: `Regarding "${selected.subject}": ${replyText}`,
         type: 'support',
       });
 
