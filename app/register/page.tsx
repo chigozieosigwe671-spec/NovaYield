@@ -17,15 +17,17 @@ export default function RegisterPage() {
   const searchParams = useSearchParams();
   const refCode = searchParams.get('ref') || '';
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    referralCode: refCode,
-    agree: false,
-  });
+ const [formData, setFormData] = useState({
+  firstName: '',
+  lastName: '',
+  email: '',
+  phone: '',
+  country: '',
+  password: '',
+  confirmPassword: '',
+  referralCode: refCode,
+  agree: false,
+});
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,6 +55,8 @@ export default function RegisterPage() {
           data: {
             first_name: formData.firstName,
             last_name: formData.lastName,
+            phone: formData.phone,
+            country: formData.country,
             referral_code_used: formData.referralCode || null,
           },
         },
@@ -77,6 +81,8 @@ export default function RegisterPage() {
           email: formData.email,
           first_name: formData.firstName,
           last_name: formData.lastName,
+          phone: formData.phone,
+          country: formData.country,
           referred_by: referrerId,
           email_verified: false,
         });
@@ -153,6 +159,7 @@ export default function RegisterPage() {
         });
 
         toast.success('Account created successfully!');
+        
         router.push('/dashboard');
       }
     } catch (err: any) {
@@ -227,7 +234,53 @@ export default function RegisterPage() {
                 />
               </div>
             </div>
+            <div>
+                <Label htmlFor="country">Country</Label>
 
+                <select
+                  id="country"
+                  className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2"
+                  value={formData.country}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      country: e.target.value,
+                    })
+                  }
+                  required
+                >
+                  <option value="">Select Country</option>
+
+                  <option value="United States">United States</option>
+                  <option value="Canada">Canada</option>
+                  <option value="United Kingdom">United Kingdom</option>
+                  <option value="Australia">Australia</option>
+                  <option value="Germany">Germany</option>
+                  <option value="France">France</option>
+                  <option value="Nigeria">Nigeria</option>
+                  <option value="South Africa">South Africa</option>
+                  <option value="India">India</option>
+                  <option value="Brazil">Brazil</option>
+                </select>
+            </div>
+            <div>
+            <Label htmlFor="phone">Phone Number</Label>
+
+            <Input
+              id="phone"
+              type="tel"
+              className="mt-1 rounded-xl"
+              placeholder="+1 555 123 4567"
+              value={formData.phone}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  phone: e.target.value,
+                })
+              }
+              required
+            />
+          </div>
             <div>
               <Label htmlFor="password">Password</Label>
               <div className="relative mt-1">

@@ -1,3 +1,7 @@
+import { welcomeTemplate } from "./templates/welcome.ts";
+import { depositApprovedTemplate } from "./templates/depositApproved.ts";
+import { passwordResetTemplate } from "./templates/passwordReset.ts";
+import { investmentStartedTemplate } from "./templates/investmentStarted.ts";
 import { createClient } from "npm:@supabase/supabase-js@2.58.0";
 
 const corsHeaders = {
@@ -22,18 +26,18 @@ Deno.serve(async (req: Request) => {
     }
 
     const emailTemplates: Record<string, { subject: string; html: string }> = {
-      registration: {
-        subject: "Welcome to NovaYield",
-        html: `<h1>Welcome to NovaYield!</h1><p>Hi ${data?.name || 'there'},</p><p>Your account has been created successfully. Start your AI-powered investment journey today!</p><p><a href="${data?.loginUrl || 'https://novayield.com/login'}" style="background:#E31E24;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;display:inline-block;">Login to Your Account</a></p>`,
+          registration: {
+          subject: "Welcome to NovaYield",
+          html: welcomeTemplate(data),
       },
       deposit_submitted: {
         subject: "Deposit Request Received",
         html: `<h1>Deposit Request Received</h1><p>Your deposit of <strong>$${data?.amount || 0}</strong> via ${data?.method || 'payment method'} is pending approval.</p><p>We will process your request within 1-24 hours.</p>`,
       },
-      deposit_approved: {
-        subject: "Deposit Approved",
-        html: `<h1>Deposit Approved!</h1><p>Your deposit of <strong>$${data?.amount || 0}</strong> has been approved and credited to your wallet.</p>`,
-      },
+        deposit_approved:{
+        subject:"Deposit Approved",
+        html: depositApprovedTemplate(data),
+    },  
       deposit_rejected: {
         subject: "Deposit Rejected",
         html: `<h1>Deposit Rejected</h1><p>Your deposit of <strong>$${data?.amount || 0}</strong> was rejected. Reason: ${data?.reason || 'Please contact support.'}</p>`,
@@ -52,7 +56,7 @@ Deno.serve(async (req: Request) => {
       },
       investment_activated: {
         subject: "Investment Activated",
-        html: `<h1>Investment Activated!</h1><p>Your investment of <strong>$${data?.amount || 0}</strong> in the ${data?.plan || 'plan'} is now active. Daily profit: $${data?.dailyProfit || 0}</p>`,
+        html: investmentStartedTemplate(data),
       },
       investment_completed: {
         subject: "Investment Completed",
@@ -80,7 +84,7 @@ Deno.serve(async (req: Request) => {
       },
       password_reset: {
         subject: "Password Reset",
-        html: `<h1>Password Reset</h1><p>Your password has been reset successfully. If this was not you, please contact support immediately.</p>`,
+        html: passwordResetTemplate(data),
       },
       referral_registered: {
         subject: "New Referral!",

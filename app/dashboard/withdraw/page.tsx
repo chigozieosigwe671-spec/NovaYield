@@ -67,16 +67,16 @@ export default function WithdrawPage() {
   const accountBalance = wallet ? Number(wallet.main_balance) : 0;
   const profitBalance = wallet ? Number(wallet.profit_balance) : 0;
   const bonusBalance = wallet ? Number(wallet.bonus_balance) : 0;
-  const withdrawalsLocked = completedPlans < 3;
+  const withdrawalsLocked = completedPlans < 2;
 
   const handleSubmit = async () => {
     if (!user || !selectedMethod) return;
     const amt = parseFloat(formData.amount);
-          // Prevent withdrawals until 3 completed plans
-      if (completedPlans < 3) {
+          // Prevent withdrawals until 2 completed plans
+      if (completedPlans < 2) {
         toast.error(
           `Withdrawals are locked. Complete ${
-            3 - completedPlans
+            2 - completedPlans
           } more investment plan(s) to unlock withdrawals.`
         );
         return;
@@ -186,11 +186,11 @@ export default function WithdrawPage() {
 
               <p className="mt-2 text-sm text-amber-700">
                 Withdrawals will become available after you successfully complete
-                <strong> 3 investment plans.</strong>
+                <strong> 2 investment plans.</strong>
               </p>
 
               <p className="mt-4 font-semibold">
-                Completed Plans: {completedPlans}/3
+                Completed Plans: {completedPlans}/2
               </p>
             </Card>
         )}
