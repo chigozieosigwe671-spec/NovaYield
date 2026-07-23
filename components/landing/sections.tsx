@@ -81,7 +81,7 @@ const sectors = [
     image: 'https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=800',
     href: '/sectors/artificial-intelligence',
     tag: 'Future Tech',
-  },
+  }, 
 ];
 
 const whyChoose = [

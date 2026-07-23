@@ -88,69 +88,30 @@ export default function RegisterPage() {
         });
 
         // Create wallet
-        await supabase.from('wallets').upsert({
+        await supabase.from("wallets").upsert({
           user_id: data.user.id,
         });
 
-          if (referrerId) {
-          // Create referral
-          await supabase.from("referrals").insert({
-            referrer_id: referrerId,
-            referred_id: data.user.id,
-            level: 1,
-            status: "pending",
+        if (referrerId) {
+          await fetch("/api/referrals/create", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              referrerId,
+              referredId: data.user.id,
+            }),
           });
 
-          // Log referral
           await supabase.from("referral_logs").insert({
             referrer_id: referrerId,
             referred_id: data.user.id,
             action: "referral_registered",
             details: `New user registered with referral code ${formData.referralCode}`,
           });
-
-          // Credit referrer's wallet
-          const { data: referrerWallet } = await supabase
-            .from("wallets")
-            .select("*")
-            .eq("user_id", referrerId)
-            .single();
-
-          if (referrerWallet) {
-            await supabase
-              .from("wallets")
-              .update({
-                bonus_balance: Number(referrerWallet.bonus_balance || 0) + 5,
-                referral_balance: Number(referrerWallet.referral_balance || 0) + 5,
-                updated_at: new Date().toISOString(),
-              })
-              .eq("user_id", referrerId);
-          }
-
-          // Update profile earnings
-          const { data: referrerProfile } = await supabase
-            .from("profiles")
-            .select("referral_earnings")
-            .eq("id", referrerId)
-            .single();
-
-          await supabase
-            .from("profiles")
-            .update({
-              referral_earnings:
-                Number(referrerProfile?.referral_earnings || 0) + 5,
-            })
-            .eq("id", referrerId);
-
-          // Mark referral as rewarded
-             await supabase
-            .from("referrals")
-            .update({
-              status: "rewarded",
-            })
-            .eq("referred_id", data.user.id);
         }
-         
+
         // Log activity
         await supabase.from('activity_logs').insert({
           user_id: data.user.id,
@@ -250,7 +211,9 @@ export default function RegisterPage() {
                   required
                 >
                   <option value="">Select Country</option>
-
+                  <option value="Afghanistan">Afghanistan</option>
+                  <option value="Bahamas">Bahamas</option> 
+                  <option value="Belgium">Belgium</option> 
                   <option value="United States">United States</option>
                   <option value="Canada">Canada</option>
                   <option value="United Kingdom">United Kingdom</option>
@@ -261,6 +224,13 @@ export default function RegisterPage() {
                   <option value="South Africa">South Africa</option>
                   <option value="India">India</option>
                   <option value="Brazil">Brazil</option>
+                   <option value="Sweden">Sweden</option>
+                  <option value="Pakistan">Pakistan</option>
+                  <option value="Turkey">Turkey</option>
+                  <option value="South Korea">South Korea</option>                   
+                  <option value="China"> China</option>        
+                  <option value="Kuwait"> Kuwait</option>
+                  <option value="Netherlands"> Netherlands</option>
                 </select>
             </div>
             <div>
