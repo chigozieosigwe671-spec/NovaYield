@@ -120,6 +120,20 @@ export default function RegisterPage() {
         });
 
         toast.success('Account created successfully!');
+            await fetch("/api/send-email", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              type: "registration",
+              to: formData.email,
+              data: {
+                name: `${formData.firstName} ${formData.lastName}`,
+                loginUrl: "https://novayield.netlify.app/login",
+              },
+            }),
+          });
         
         router.push('/dashboard');
       }

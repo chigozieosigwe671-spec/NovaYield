@@ -59,36 +59,39 @@ const fetchUsers = async () => {
     fetchUsers();
   };
 
-  const adjustWallet = async (type: 'add' | 'subtract') => {
-    if (!selected || !walletData || !adjustAmount) return;
-    const amt = parseFloat(adjustAmount);
-    const newBalance = type === 'add'
-      ? Number(walletData.main_balance) + amt
-      : Math.max(0, Number(walletData.main_balance) - amt);
+      const adjustWallet = async (action: "add" | "subtract") => {
+      if (!selected || !adjustAmount) return;
 
-    await supabase.from('wallets').update({
-      main_balance: newBalance,
-      updated_at: new Date().toISOString(),
-    }).eq('user_id', selected.id);
+      const response = await fetch("/api/admin/adjust-wallet", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: selected.id,
+          balanceType: "main_balance",
+          amount: Number(adjustAmount),
+          action,
+        }),
+      });
 
-    await supabase.from('transactions').insert({
-      user_id: selected.id,
-      type: 'admin_adjustment',
-      amount: amt,
-      status: 'completed',
-      description: `Admin ${type === 'add' ? 'credited' : 'debited'} $${amt}`,
-    });
+      const result = await response.json();
 
-    await supabase.from('activity_logs').insert({
-      user_id: selected.id,
-      action: 'wallet_adjusted',
-      details: `Admin ${type}ed $${amt} to wallet`,
-    });
+      if (!response.ok) {
+        toast.error(result.error);
+        return;
+      }
 
-    toast.success(`Wallet ${type === 'add' ? 'credited' : 'debited'} successfully`);
-    setAdjustAmount('');
-    viewUser(selected);
-  };
+      toast.success(
+        action === "add"
+          ? "Wallet credited successfully"
+          : "Wallet debited successfully"
+      );
+
+      setAdjustAmount("");
+
+      await viewUser(selected);
+    };
 
   return (
     <div className="space-y-6">
