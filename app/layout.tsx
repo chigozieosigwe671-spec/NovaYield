@@ -2,7 +2,7 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { Plus_Jakarta_Sans, Sora } from 'next/font/google';
 import { ThemeProvider } from '@/components/providers/theme-provider';
-import SupportWidget from "@/components/support/SupportWidget";
+import SupportWrapper from "@/components/SupportWrapper";
 import { AuthProvider } from '@/components/providers/auth-provider';
 import { Toaster } from '@/components/ui/sonner';
 
@@ -57,6 +57,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  
   return (
     <html lang="en" suppressHydrationWarning>
      
@@ -64,7 +65,7 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
           <AuthProvider>
             {children}
-             <SupportWidget />
+             <SupportWrapper />
             <Toaster />
           </AuthProvider>
         </ThemeProvider>

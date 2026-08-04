@@ -365,9 +365,10 @@ export default function AdminSupportPage() {
                         }`}
                       >
 
-                        <p className="text-sm leading-6 break-words">
+                        <p className="text-sm leading-6 break-words break-all whitespace-pre-wrap">
                           {msg.message}
                         </p>
+                       
 
                         <p
                           className={`text-[8px] mt-2 ${

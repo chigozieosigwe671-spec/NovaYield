@@ -37,96 +37,51 @@ export default function ChatWindow({ onClose }: Props) {
       
     }, [conversation]);
 
-    async function initializeConversation() {
+async function initializeConversation() {
+  if (!user) return;
 
-      const { data: conversations, error } = await supabase
-          .from("support_conversations")
-          .select("*")
-          .eq("user_id", user!.id)
-          .eq("status", "open")
-          .order("created_at", { ascending: false });
+  const { data: conversations, error } = await supabase
+    .from("support_conversations")
+    .select("*")
+    .eq("user_id", user.id)
+    .eq("status", "open")
+    .order("created_at", { ascending: false });
 
-        if (error) throw error;
+  if (error) {
+    console.error(error);
+    return;
+  }
 
-        let conversation = conversations?.[0];
+  let currentConversation = conversations?.[0];
 
-        if (!conversation) {
-          const { data, error } = await supabase
-            .from("support_conversations")
-            .insert({
-              user_id: user!.id,
-              status: "open",
-            })
-            .select()
-            .single();
+  if (!currentConversation) {
+    const { data, error } = await supabase
+      .from("support_conversations")
+      .insert({
+        user_id: user.id,
+        status: "open",
+      })
+      .select()
+      .single();
 
-          if (error) throw error;
-
-          conversation = data;
-        }
-
-      setConversation(conversation);
-
-      loadMessages(conversation.id);
-
-     const channel = supabase
-  .channel("support-" + conversation.id)
-
-  // Listen for new messages
-  .on(
-    "postgres_changes",
-    {
-      event: "INSERT",
-      schema: "public",
-      table: "support_messages",
-      filter: `conversation_id=eq.${conversation.id}`,
-    },
-    (payload) => {
-
-      console.log("Realtime received:", payload.new);
-
-      setMessages((old) => {
-
-        if (old.some((m) => m.id === payload.new.id)) {
-          return old;
-        }
-
-        return [...old, payload.new];
-
-      });
-
-      setTimeout(() => {
-        bottomRef.current?.scrollIntoView({
-          behavior: "smooth",
-        });
-      }, 100);
-
+    if (error) {
+      console.error(error);
+      return;
     }
-  )
 
-  // Listen for typing updates
-  .on(
-    "postgres_changes",
-    {
-      event: "UPDATE",
-      schema: "public",
-      table: "support_conversations",
-      filter: `id=eq.${conversation.id}`,
-    },
-    (payload: any) => {
+    currentConversation = data;
+  }
 
-      console.log("Typing update:", payload.new.admin_typing);
-      setAdminTyping(payload.new.admin_typing);
+  setConversation(currentConversation);
 
-    }
-  )
+  const { data: msgs } = await supabase
+    .from("support_messages")
+    .select("*")
+    .eq("conversation_id", currentConversation.id)
+    .order("created_at", { ascending: true });
 
-  .subscribe((status) => {
-  console.log("Realtime status:", status);
-});
-    
+  setMessages(msgs || []);
 }
-
     async function loadMessages(conversationId: string) {
 
       const { data } = await supabase
