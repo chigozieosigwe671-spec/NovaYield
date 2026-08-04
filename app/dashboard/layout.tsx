@@ -26,7 +26,7 @@ import { useAuth } from '@/components/providers/auth-provider';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/lib/supabase/client';
-import { SupportWidget } from '@/components/dashboard/support-widget';
+import SupportWidget from '@/components/support/SupportWidget';
 
 const navItems = [
   { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },

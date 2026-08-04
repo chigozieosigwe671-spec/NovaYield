@@ -147,10 +147,11 @@ export function AboutSection() {
             <h2 className="font-display text-4xl md:text-4xl font-bold text-navy dark:text-white mb-7 text-balance">
               Sustainable Strategy Based on AI
             </h2>
-            <p className="text-muted-foreground text-md mb-5 leading-relaxed text-pretty">
+            <p className="text-muted-foreground text-sm sm:text-base lg:text-md leading-7 sm:leading-8 mb-5 px-2 sm:px-0">
               At NovaYield, we are at the forefront of the investment landscape, leveraging the unparalleled capabilities of artificial intelligence to drive success. With a focus on agriculture, oil and gas, as well as gold and precious metal mining, we empower investors to unlock transformative opportunities for growth and profitability.
             </p>
-            <p className="text-muted-foreground text-md leading-relaxed text-pretty">
+
+            <p className="text-muted-foreground text-sm sm:text-base lg:text-md leading-7 sm:leading-8 px-2 sm:px-0">
               Our AI algorithms harness the power of big data, enabling us to analyze market trends, identify emerging sectors, and make data-driven investment decisions that deliver exceptional results.
             </p>
 

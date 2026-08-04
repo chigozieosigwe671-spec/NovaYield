@@ -1,182 +1,454 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-import { toast } from 'sonner';
-import { Search, Send, Eye } from 'lucide-react';
-import { supabase } from '@/lib/supabase/client';
-import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
-import {
-  Dialog, DialogContent, DialogHeader, DialogTitle,
-} from '@/components/ui/dialog';
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase/client";
+import { useAuth } from "@/components/providers/auth-provider";
+import { User, Shield } from "lucide-react";
+
+interface Conversation {
+  id: string;
+  user_id: string;
+  status: string;
+  created_at: string;
+
+  last_message_at?: string;
+  unread_count?: number;
+
+  profiles?: {
+    id: string;
+    first_name: string;
+    last_name: string;
+    email: string;
+  };
+}
 
 export default function AdminSupportPage() {
-  const [tickets, setTickets] = useState<any[]>([]);
-  const [search, setSearch] = useState('');
-  const [selected, setSelected] = useState<any | null>(null);
-  const [replies, setReplies] = useState<any[]>([]);
-  const [replyText, setReplyText] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedConversation, setSelectedConversation] = useState<any>(null);
+  const [messages, setMessages] = useState<any[]>([]);
+  const [reply, setReply] = useState("");
+  const { user } = useAuth();
 
-  const fetchTickets = async () => {
-    const { data, error } = await supabase
-      .from("support_tickets")
+  useEffect(() => {
+    fetchConversations();
+  }, []);
+
+  useEffect(() => {
+    if (!selectedConversation) return;
+
+    // Load existing messages
+    loadMessages(selectedConversation.id);
+
+    // Listen for new messages
+    const channel = supabase
+      .channel("admin-chat-" + selectedConversation.id)
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "support_messages",
+          filter: `conversation_id=eq.${selectedConversation.id}`,
+        },
+        () => {
+          loadMessages(selectedConversation.id);
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [selectedConversation]);
+
+  async function fetchConversations() {
+  setLoading(true);
+
+      // Get all conversations
+     const { data: conversationsData, error } = await supabase
+      .from("support_conversations")
       .select("*")
+      .eq("status", "open")
       .order("created_at", { ascending: false });
 
-    console.log(data, error);
+      if (error) {
+        console.error(error);
+        setLoading(false);
+        return;
+      }
 
-    setTickets(data || []);
-  };
+      // Get all profiles
+      const { data: profilesData, error: profileError } = await supabase
+        .from("profiles")
+        .select("id, first_name, last_name, email");
 
-  useEffect(() => { fetchTickets(); }, []);
+      if (profileError) {
+        console.error(profileError);
+        setLoading(false);
+        return;
+      }
 
-  const viewTicket = async (ticket: any) => {
-    setSelected(ticket);
-    const { data } = await supabase.from('support_replies').select('*').eq('ticket_id', ticket.id).order('created_at', { ascending: true });
-    setReplies(data || []);
-  };
+      // Merge conversations with profiles
+      const merged = conversationsData.map((conversation) => ({
+        ...conversation,
+        profiles: profilesData.find(
+          (profile) => profile.id === conversation.user_id
+        ),
+      }));
 
-  const sendReply = async () => {
-    if (!selected || !replyText) return;
-    setLoading(true);
-    try {
-      await supabase.from('support_replies').insert({
-        ticket_id: selected.id,
-        user_id: selected.user_id,
-        message: replyText,
-        is_admin: true,
-      });
+      console.log("Merged conversations:", JSON.stringify(merged, null, 2));
 
-      await supabase.from('support_tickets').update({
-        status: 'pending',
-        updated_at: new Date().toISOString(),
-      }).eq('id', selected.id);
+          const conversationsWithLastMessage = await Promise.all(
+           merged.map(async (conversation) => {
+          const { data } = await supabase
+            .from("support_messages")
+            .select("created_at")
+            .eq("conversation_id", conversation.id)
+            .order("created_at", { ascending: false })
+            .limit(1)
+            .maybeSingle();
 
-      await supabase.from('notifications').insert({
-        user_id: selected.user_id,
-        title: 'Support Reply',
-        message: `Regarding "${selected.subject}": ${replyText}`,
-        type: 'support',
-      });
+          const { count } = await supabase
+            .from("support_messages")
+            .select("*", { count: "exact", head: true })
+            .eq("conversation_id", conversation.id)
+            .eq("sender", "user")
+            .eq("read", false);
 
-      toast.success('Reply sent!');
-      setReplyText('');
-      viewTicket(selected);
-    } catch (err: any) {
-      toast.error(err.message || 'Failed to send reply');
-    } finally {
+          return {
+            ...conversation,
+            last_message_at: data?.created_at || conversation.created_at,
+            unread_count: count || 0,
+          };
+        })
+      );
+
+      conversationsWithLastMessage.sort(
+        (a: any, b: any) =>
+          new Date(b.last_message_at).getTime() -
+          new Date(a.last_message_at).getTime()
+      );
+
+      setConversations(conversationsWithLastMessage as any);
+
       setLoading(false);
     }
-  };
+    async function loadMessages(conversationId: string) {
+        const { data, error } = await supabase
+          .from("support_messages")
+          .select("*")
+          .eq("conversation_id", conversationId)
+          .order("created_at", { ascending: true });
 
-  const closeTicket = async (ticket: any) => {
-    await supabase.from('support_tickets').update({ status: 'closed', updated_at: new Date().toISOString() }).eq('id', ticket.id);
-    toast.success('Ticket closed');
-    fetchTickets();
-    setSelected(null);
-  };
+        if (error) {
+          console.error(error);
+          return;
+        }
 
-  const filtered = tickets.filter(t =>
-    !search || t.user?.email?.toLowerCase().includes(search.toLowerCase()) || t.subject?.toLowerCase().includes(search.toLowerCase())
-  );
+        setMessages(data || []);
+        await supabase
+          .from("support_messages")
+          .update({
+            read: true,
+          })
+          .eq("conversation_id", conversationId)
+          .eq("sender", "user")
+          .eq("read", false);
+
+        fetchConversations();
+      }
+    
+      async function sendReply() {
+    if (!reply.trim() || !selectedConversation || !user) return;
+
+    const { error } = await supabase
+      .from("support_messages")
+      .insert({
+        conversation_id: selectedConversation.id,
+        sender: "admin",
+        message: reply,
+      });
+
+    if (error) {
+      console.log(error);
+      alert(error.message);
+      return;
+    }
+
+    await loadMessages(selectedConversation.id);
+
+        await supabase
+          .from("support_conversations")
+          .update({
+            admin_typing: false,
+          })
+          .eq("id", selectedConversation.id);
+
+        setReply("");
+  } 
+  async function closeConversation() {
+      if (!selectedConversation) return;
+
+      const { error } = await supabase
+        .from("support_conversations")
+        .update({
+          status: "closed",
+        })
+        .eq("id", selectedConversation.id);
+
+      if (error) {
+        console.log(error);
+        return;
+      }
+
+      await fetchConversations();
+
+      setSelectedConversation(null);
+      setMessages([]);
+    }
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-xl md:text-2xl font-bold text-navy dark:text-white">Support Tickets</h1>
-        <p className="text-muted-foreground mt-1">Manage customer support requests.</p>
-      </div>
+    <div className="p-3 sm:p-8">
 
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-        <Input className="pl-10 rounded-xl max-w-md" placeholder="Search tickets..." value={search} onChange={(e) => setSearch(e.target.value)} />
-      </div>
+      <h1 className="text-3xl font-bold mb-8">
+        Live Support
+      </h1>
 
-      <Card className="rounded-2xl p-6 card-shadow border-0">
-        {filtered.length === 0 ? (
-          <p className="text-center text-muted-foreground py-8">No tickets found.</p>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-border">
-                  <th className="text-left text-sm font-medium text-muted-foreground pb-3">User</th>
-                  <th className="text-left text-sm font-medium text-muted-foreground pb-3">Subject</th>
-                  <th className="text-left text-sm font-medium text-muted-foreground pb-3">Priority</th>
-                  <th className="text-left text-sm font-medium text-muted-foreground pb-3">Date</th>
-                  <th className="text-left text-sm font-medium text-muted-foreground pb-3">Status</th>
-                  <th className="text-left text-sm font-medium text-muted-foreground pb-3">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filtered.map((t) => (
-                  <motion.tr key={t.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="border-b border-border/50">
-                    <td className="py-3 text-sm text-navy dark:text-white">{t.user_id}</td>
-                    <td className="py-3 text-sm font-medium text-navy dark:text-white">{t.subject}</td>
-                    <td className="py-3">
-                      <Badge className={t.priority === 'urgent' ? 'bg-red-100 text-red-700' : t.priority === 'high' ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-700'}>
-                        {t.priority}
-                      </Badge>
-                    </td>
-                    <td className="py-3 text-sm text-muted-foreground">{new Date(t.created_at).toLocaleDateString()}</td>
-                    <td className="py-3">
-                      <Badge className={t.status === 'open' ? 'bg-green-100 text-green-700' : t.status === 'pending' ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-700'}>
-                        {t.status}
-                      </Badge>
-                    </td>
-                    <td className="py-3">
-                      <Button size="sm" variant="outline" className="rounded-lg" onClick={() => viewTicket(t)}>
-                        <Eye className="h-4 w-4" />
-                      </Button>
-                    </td>
-                  </motion.tr>
-                ))}
-              </tbody>
-            </table>
+      <div className="flex flex-col lg:grid lg:grid-cols-12 gap-6">
+
+        <div className="w-full lg:col-span-4 rounded-none border bg-card max-h-[300px] lg:max-h-[calc(100vh-180px)] overflow-y-auto">
+
+          <div className="p-4 border-b">
+            <h2 className="font-semibold">Conversations</h2>
+            <p className="text-sm text-gray-500">
+              Total: {conversations.length}
+            </p>
           </div>
-        )}
-      </Card>
 
-      <Dialog open={!!selected} onOpenChange={(open) => !open && setSelected(null)}>
-        <DialogContent className="rounded-2xl max-w-2xl max-h-[80vh] overflow-y-auto">
-          <DialogHeader><DialogTitle>{selected?.subject}</DialogTitle></DialogHeader>
-          {selected && (
-            <div className="space-y-4">
-              <div className="p-4 bg-muted/30 rounded-xl">
-                <p className="text-xs text-muted-foreground mb-1">{selected.user_id} • {new Date(selected.created_at).toLocaleString()}</p>
-                <p className="text-sm text-navy dark:text-white">{selected.message}</p>
-              </div>
+          {loading ? (
 
-              {replies.map((r) => (
-                <div key={r.id} className={`p-4 rounded-xl ${r.is_admin ? 'bg-blue-50 ml-8' : 'bg-muted/30 mr-8'}`}>
-                  <p className="text-xs text-muted-foreground mb-1">{r.is_admin ? 'Admin' : 'User'} • {new Date(r.created_at).toLocaleString()}</p>
-                  <p className="text-sm text-navy dark:text-white">{r.message}</p>
-                </div>
-              ))}
-
-              <div>
-                <Label htmlFor="reply">Reply</Label>
-                <Textarea id="reply" className="mt-1 rounded-xl" placeholder="Type your reply..." value={replyText} onChange={(e) => setReplyText(e.target.value)} rows={3} />
-              </div>
-
-              <div className="flex gap-3">
-                <Button onClick={sendReply} disabled={loading || !replyText} className="flex-1 bg-red-brand hover:bg-red-dark text-white rounded-xl">
-                  <Send className="h-4 w-4 mr-2" /> {loading ? 'Sending...' : 'Send Reply'}
-                </Button>
-                {selected.status !== 'closed' && (
-                  <Button variant="outline" className="rounded-xl" onClick={() => closeTicket(selected)}>Close Ticket</Button>
-                )}
-              </div>
+            <div className="p-4">
+              Loading...
             </div>
+
+          ) : (
+
+            conversations.map((conversation) => (
+
+              <button
+                key={conversation.id}
+                onClick={() => setSelectedConversation(conversation)}
+                className="w-full text-left p-4 border-b hover:bg-muted transition"
+              >
+
+               <div className="flex items-center justify-between">
+
+                <h3 className="font-semibold">
+                  {conversation.profiles?.first_name}{" "}
+                  {conversation.profiles?.last_name}
+                </h3>
+
+                {(conversation.unread_count ?? 0) > 0 && (
+                  <span className="bg-red-600 text-white text-xs px-2 py-1 rounded-full">
+                    {conversation.unread_count ?? 0}
+                  </span>
+                )}
+
+              </div>
+
+                <p className="text-xs text-red-500">
+                  {conversation.id}
+                </p>
+
+                <p className="text-sm text-muted-foreground">
+                  {conversation.profiles?.email}
+                </p>
+
+              </button>
+
+            ))
+
           )}
-        </DialogContent>
-      </Dialog>
+
+        </div>
+
+        <div className="w-full lg:col-span-8 rounded-none border bg-card flex flex-col h-[70vh] lg:h-[calc(100vh-180px)]">
+
+            {selectedConversation ? (
+
+              <>
+
+                {/* Header */}
+                <div className="border-b p-3 sm:p-3">
+
+                  <h2 className="font-bold text-sm">
+
+                    {selectedConversation.profiles?.first_name}{" "}
+                    {selectedConversation.profiles?.last_name}
+
+                  </h2>
+
+                  <p className="text-sm text-muted-foreground">
+
+                    {selectedConversation.profiles?.email}
+
+                  </p>
+                  <div className="mt-4">
+                    <button
+                      onClick={closeConversation}
+                      className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-none text-sm"
+                    >
+                      Close Conversation
+                    </button>
+                  </div>
+
+                </div>
+
+                {/* Messages */}
+                <div className="flex-1 overflow-y-auto p-3 sm:p-6 space-y-4">
+
+                  {messages.length === 0 ? (
+
+                    <p className="text-muted-foreground">
+
+                      No messages yet.
+
+                    </p>
+
+                  ) : (
+
+                    messages.map((msg) => (
+
+                  <div
+                    key={msg.id}
+                    className={`flex ${
+                      msg.sender === "user"
+                        ? "justify-start"
+                        : "justify-end"
+                    }`}
+                  >
+
+                    <div
+                      className={`flex items-end gap-2 max-w-[80%] ${
+                        msg.sender === "admin"
+                          ? "flex-row-reverse"
+                          : ""
+                      }`}
+                    >
+
+                      <div
+                        className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                          msg.sender === "user"
+                            ? "bg-gray-300"
+                            : "bg-red-600"
+                        }`}
+                      >
+
+                        {msg.sender === "user" ? (
+
+                          <User className="w-5 h-5 text-gray-700" />
+
+                        ) : (
+
+                          <Shield className="w-5 h-5 text-white" />
+
+                        )}
+
+                      </div>
+
+                      <div
+                        className={`rounded-lg px-3 py-1 ${
+                          msg.sender === "user"
+                            ? "bg-gray-100"
+                            : "bg-red-600 text-white"
+                        }`}
+                      >
+
+                        <p className="text-sm leading-6 break-words">
+                          {msg.message}
+                        </p>
+
+                        <p
+                          className={`text-[8px] mt-2 ${
+                            msg.sender === "user"
+                              ? "text-gray-500"
+                              : "text-red-100"
+                          }`}
+                        >
+                          {new Date(msg.created_at).toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </p>
+
+                      </div>
+
+                    </div>
+
+                  </div>
+
+                ))
+
+                  )}
+
+                </div>
+
+                
+                {/* Reply box */}
+                <div className="border-t p-3 sm:p-4 flex gap-2">
+
+                  <input
+                      value={reply}
+                      onChange={async (e) => {
+                        const value = e.target.value;
+
+                        setReply(value);
+
+                        console.log("Updating typing:", value.length > 0);
+
+                        if (!selectedConversation) return;
+
+                        await supabase
+                          .from("support_conversations")
+                          .update({
+                            admin_typing: value.length > 0,
+                          })
+                          .eq("id", selectedConversation.id);
+                      }}
+                      placeholder="Type your reply..."
+                      className="flex-1 border rounded-none px-3 sm:px-4 py-3 text-sm sm:text-base"
+                    />
+
+                  <button
+                    onClick={sendReply}
+                    className="bg-red-600 text-white px-4 sm:px-4 rounded-none whitespace-nowrap text-sm"
+                  >
+                    Send
+                  </button>
+
+                </div>
+
+              </>
+
+            ) : (
+
+              <div className="flex-1 flex items-center justify-center">
+
+                <p className="text-muted-foreground">
+
+                  Select a conversation
+
+                </p>
+
+              </div>
+
+            )}
+
+          </div>
+
+      </div>
+
     </div>
   );
 }

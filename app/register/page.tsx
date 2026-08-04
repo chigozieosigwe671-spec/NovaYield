@@ -234,6 +234,7 @@ export default function RegisterPage() {
                   <option value="Australia">Australia</option>
                   <option value="Germany">Germany</option>
                   <option value="France">France</option>
+                  <option value="Spain">Spain</option>
                   <option value="Nigeria">Nigeria</option>
                   <option value="South Africa">South Africa</option>
                   <option value="India">India</option>

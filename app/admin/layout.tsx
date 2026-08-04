@@ -18,6 +18,7 @@ import {
   Menu,
   X,
   Shield,
+
 } from 'lucide-react';
 import { useAuth } from '@/components/providers/auth-provider';
 import { Button } from '@/components/ui/button';
@@ -43,10 +44,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   useEffect(() => {
     if (!loading && !user) router.push('/login');
-    if (!loading && user && profile && !profile.is_admin) router.push('/dashboard');
+    if (!loading && user && profile && profile.role !== "admin") {
+  router.push("/dashboard");
+}
   }, [loading, user, profile, router]);
 
-  if (loading || !user || (profile && !profile.is_admin)) {
+  if (loading || !user || (profile && profile.role !== "admin")) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-muted/20">
         <div className="animate-pulse">
