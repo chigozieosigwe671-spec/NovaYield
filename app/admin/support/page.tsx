@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase/client";
 import { useAuth } from "@/components/providers/auth-provider";
-import { User, Shield } from "lucide-react";
+import { User, Shield, ImagePlus } from "lucide-react";
 
 interface Conversation {
   id: string;
@@ -28,6 +28,7 @@ export default function AdminSupportPage() {
   const [selectedConversation, setSelectedConversation] = useState<any>(null);
   const [messages, setMessages] = useState<any[]>([]);
   const [reply, setReply] = useState("");
+  const [image, setImage] = useState<File | null>(null);
   const { user } = useAuth();
 
   useEffect(() => {
@@ -160,14 +161,60 @@ export default function AdminSupportPage() {
       }
     
       async function sendReply() {
-    if (!reply.trim() || !selectedConversation || !user) return;
+        console.log("sendReply clicked");
+      console.log({
+        reply,
+        selectedConversation,
+        user,
+        image,
+      });
 
+      if (!reply.trim() && !image) {
+        console.log("Nothing to send");
+        return;
+      }
+
+      if (!selectedConversation) {
+        console.log("No conversation selected");
+        return;
+      }
+
+      if (!user) {
+        console.log("No user");
+        return;
+      }
+
+    let imageUrl = null;
+
+    if (image) {
+        console.log("Selected image:", image);
+      const fileName = `${Date.now()}-${image.name}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from("support-images")
+        .upload(fileName, image);
+
+
+        console.log("Upload error:", uploadError);
+
+      if (uploadError) {
+        alert(uploadError.message);
+        return;
+      }
+
+      const { data } = supabase.storage
+        .from("support-images")
+        .getPublicUrl(fileName);
+
+      imageUrl = data.publicUrl;
+    }
     const { error } = await supabase
       .from("support_messages")
       .insert({
         conversation_id: selectedConversation.id,
         sender: "admin",
         message: reply,
+        image_url: imageUrl,
       });
 
     if (error) {
@@ -186,6 +233,7 @@ export default function AdminSupportPage() {
           .eq("id", selectedConversation.id);
 
         setReply("");
+        setImage(null);
   } 
   async function closeConversation() {
       if (!selectedConversation) return;
@@ -366,7 +414,17 @@ export default function AdminSupportPage() {
                       >
 
                         <p className="text-sm leading-6 break-words break-all whitespace-pre-wrap">
-                          {msg.message}
+                          {msg.image_url && (
+                              <img
+                                src={msg.image_url}
+                                alt="attachment"
+                                className="rounded-lg mb-2 max-w-full"
+                              />
+                            )}
+
+                            {msg.message && (
+                              <p>{msg.message}</p>
+                            )}
                         </p>
                        
 
@@ -395,7 +453,32 @@ export default function AdminSupportPage() {
 
                 </div>
 
-                
+                {image && (
+                  <div className="px-4 py-2 border-t bg-gray-50 flex items-center gap-4">
+
+                    <img
+                      src={URL.createObjectURL(image)}
+                      alt="Preview"
+                      className="w-24 h-24 object-cover rounded-lg border"
+                    />
+
+                    <div className="flex flex-col gap-2">
+
+                      <p className="text-sm">
+                        {image.name}
+                      </p>
+
+                      <button
+                        onClick={() => setImage(null)}
+                        className="bg-red-600 text-white px-3 py-1 rounded"
+                      >
+                        Remove
+                      </button>
+
+                    </div>
+
+                  </div>
+                )}
                 {/* Reply box */}
                 <div className="border-t p-3 sm:p-4 flex gap-2">
 
@@ -420,7 +503,21 @@ export default function AdminSupportPage() {
                       placeholder="Type your reply..."
                       className="flex-1 border rounded-none px-3 sm:px-4 py-3 text-sm sm:text-base"
                     />
+                   
+                  <label className="cursor-pointer bg-gray-200 px-3 py-2 rounded-lg">
+                    <ImagePlus className="w-5 h-5" />
 
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => {
+                        if (e.target.files?.[0]) {
+                          setImage(e.target.files[0]);
+                        }
+                      }}
+                    />
+                  </label>
                   <button
                     onClick={sendReply}
                     className="bg-red-600 text-white px-4 sm:px-4 rounded-none whitespace-nowrap text-sm"

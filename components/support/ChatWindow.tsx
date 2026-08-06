@@ -20,6 +20,7 @@ export default function ChatWindow({ onClose }: Props) {
   const [conversation, setConversation] = useState<any>(null);
   const [messages, setMessages] = useState<any[]>([]);
   const [adminTyping, setAdminTyping] = useState(false);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
       if (user) {
@@ -176,7 +177,7 @@ async function initializeConversation() {
           z-50
           bg-[#07152F]
           border
-          border-red-600
+          border-black
           shadow-2xl
           flex
           flex-col
@@ -192,13 +193,13 @@ async function initializeConversation() {
           sm:bottom-24
           sm:right-6
           sm:left-auto
-          sm:rounded-xl
+          sm:rounded-none
         "
       >
 
-    <div className="bg-[#091B39] p-4 border-b border-red-700 flex items-center justify-between">
+    <div className="bg-[#091B39] p-4 border-b border-black flex items-center justify-between ">
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 ">
           <div className="w-12 h-12 rounded-full bg-[#E31E24] flex items-center justify-center text-white font-bold">
             NY
           </div>
@@ -254,7 +255,28 @@ async function initializeConversation() {
               }`}
             >
               <p className="break-words break-all whitespace-pre-wrap">
-                {msg.message}
+                {msg.image_url && (
+                  <a
+                    href={msg.image_url}
+                    download
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <img
+                      src={msg.image_url}
+                      alt="attachment"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setPreviewImage(msg.image_url);
+                      }}
+                      className="max-w-full rounded-lg mb-2 border cursor-pointer hover:opacity-90 transition"
+                    />
+                  </a>
+                )}
+
+                {msg.message && (
+                  <p>{msg.message}</p>
+                )}
               </p>
             </motion.div>
 
@@ -274,7 +296,7 @@ async function initializeConversation() {
           </p>
         </div>
       )}
-      <div className="sticky bottom-0 bg-[#07152F] p-3 border-t border-red-700 flex gap-2">
+      <div className="sticky bottom-0 bg-[#07152F] p-3 border-t border-black flex gap-2">
 
            <input
             value={message}
@@ -296,6 +318,51 @@ async function initializeConversation() {
            </motion.button>
 
       </div>
+
+      {/* Fullscreen Image Preview */}
+      {previewImage && (
+        <div
+          className="fixed inset-0 bg-black/90 z-[9999] flex items-center justify-center"
+        >
+          <button
+            onClick={() => setPreviewImage(null)}
+            className="absolute top-5 right-5 text-white text-4xl"
+          >
+            ✕
+          </button>
+
+          <img
+            src={previewImage}
+            alt="preview"
+            className="max-w-[95%] max-h-[95%] rounded-lg"
+          />
+
+          <button
+            onClick={async () => {
+              if (!previewImage) return;
+
+              const response = await fetch(previewImage);
+              const blob = await response.blob();
+
+              const url = window.URL.createObjectURL(blob);
+
+              const link = document.createElement("a");
+              link.href = url;
+              link.download = "NovaYield-Support-Image.jpg";
+
+              document.body.appendChild(link);
+              link.click();
+              link.remove();
+
+              window.URL.revokeObjectURL(url);
+            }}
+            className="absolute bottom-6 bg-red-600 text-white px-5 py-2 rounded-lg"
+          >
+            Download Image
+          </button>
+        </div>
+      )}
+      
 
     </div>
   );
