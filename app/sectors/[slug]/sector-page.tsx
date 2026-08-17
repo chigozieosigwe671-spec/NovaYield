@@ -26,14 +26,14 @@ export function SectorPage({ sector }: { sector: Sector }) {
           <div className="absolute inset-0 bg-grid opacity-[0.04]" />
         </div>
 
-        <div className="relative h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center pt-20">
+        <div className="relative h-full max-w-7xl mx-auto px-10 sm:px-6 lg:px-8 flex items-center pt-20">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
             className="max-w-3xl"
           >
-            <Link href="/#services" className="inline-flex items-center gap-2 transition-colors hover:text-white font-display max-w-4xl text-md md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-7 drop-shadow-lg">
+            <Link href="/#services" className="inline-flex items-center gap-2 transition-colors hover:text-white font-display max-w-4xl text-2xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-7 drop-shadow-lg">
               <ArrowLeft className="h-4 w-4" />
               All Sectors
             </Link>
@@ -68,7 +68,7 @@ export function SectorPage({ sector }: { sector: Sector }) {
 
       {/* Featured Image + Long Description */}
       <section className="py-20 md:py-28 bg-white dark:bg-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-10 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-14 items-center">
             <motion.div
               initial={{ opacity: 0, x: -30 }}
@@ -77,10 +77,10 @@ export function SectorPage({ sector }: { sector: Sector }) {
               transition={{ duration: 0.7 }}
             >
               <p className="text-red-brand font-semibold text-sm tracking-[0.2em] mb-4">OVERVIEW</p>
-              <h2 className="font-display text-4xl md:text-5xl lg:text-4xl font-bold text-navy dark:text-white mb-6 text-balance">
+              <h2 className="font-display text-2xl md:text-5xl lg:text-4xl font-bold text-navy dark:text-white mb-6 text-balance">
                 A Closer Look at {sector.title}
               </h2>
-              <p className="text-muted-foreground text-md leading-relaxed text-pretty ">
+              <p className="text-muted-foreground text-sm leading-relaxed text-pretty ">
                 {sector.longDesc}
               </p>
             </motion.div>
@@ -123,7 +123,7 @@ export function SectorPage({ sector }: { sector: Sector }) {
 
       {/* Benefits + Risk Management */}
       <section className="py-20 md:py-28 bg-muted/30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-10 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-8">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -135,7 +135,7 @@ export function SectorPage({ sector }: { sector: Sector }) {
                 <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-green-100 mb-5">
                   <CheckCircle2 className="h-7 w-7 text-green-600" />
                 </div>
-                <h3 className="font-display text-4xl md:text-5xl lg:text-3xl font-bold text-navy dark:text-white mb-6">
+                <h3 className="font-display text-2xl md:text-5xl lg:text-3xl font-bold text-navy dark:text-white mb-6">
                   Key Benefits
                 </h3>
                 <ul className="space-y-4">
@@ -144,7 +144,7 @@ export function SectorPage({ sector }: { sector: Sector }) {
                       <div className="flex items-center justify-center w-6 h-6 rounded-full bg-red-brand/10 flex-shrink-0 mt-0.5">
                         <CheckCircle2 className="h-4 w-4 text-red-brand" />
                       </div>
-                      <span className="text-muted-foreground text-[15px] md:text-base leading-relaxed text-pretty">{b}</span>
+                      <span className="text-muted-foreground text-[13px] md:text-base leading-relaxed text-pretty">{b}</span>
                     </li>
                   ))}
                 </ul>
@@ -161,7 +161,7 @@ export function SectorPage({ sector }: { sector: Sector }) {
                 <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-navy mb-5">
                   <ShieldCheck className="h-7 w-7 text-red-brand" />
                 </div>
-                <h3 className="font-display text-4xl md:text-5xl lg:text-3xl font-bold text-navy dark:text-white mb-6">
+                <h3 className="font-display text-2xl md:text-5xl lg:text-3xl font-bold text-navy dark:text-white mb-6">
                   Risk Management
                 </h3>
                 <ul className="space-y-4">
@@ -170,7 +170,7 @@ export function SectorPage({ sector }: { sector: Sector }) {
                       <div className="flex items-center justify-center w-6 h-6 rounded-full bg-navy/10 flex-shrink-0 mt-0.5">
                         <ShieldCheck className="h-4 w-4 text-navy" />
                       </div>
-                      <span className="text-muted-foreground text-[15px] md:text-base leading-relaxed text-pretty">{r}</span>
+                      <span className="text-muted-foreground text-[13px] md:text-base leading-relaxed text-pretty">{r}</span>
                     </li>
                   ))}
                 </ul>
@@ -182,7 +182,7 @@ export function SectorPage({ sector }: { sector: Sector }) {
 
       {/* Expected Returns */}
       <section className="py-20 md:py-28 bg-white dark:bg-background">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-5xl mx-auto px-10 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -197,10 +197,10 @@ export function SectorPage({ sector }: { sector: Sector }) {
                 <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-white/10 mb-5">
                   <Target className="h-7 w-7 text-red-brand" />
                 </div>
-                <h3 className="font-display text-4xl md:text-5xl lg:text-3xl font-bold mb-5">
+                <h3 className="font-display text-2xl md:text-5xl lg:text-3xl font-bold mb-5">
                   Expected Returns
                 </h3>
-                <p className="text-white/70 text-md leading-relaxed text-pretty max-w-3xl">
+                <p className="text-white/70 text-sm leading-relaxed text-pretty max-w-3xl">
                   {sector.expectedReturns}
                 </p>
               </div>
@@ -211,7 +211,7 @@ export function SectorPage({ sector }: { sector: Sector }) {
 
       {/* Why Choose This Sector */}
       <section className="py-20 md:py-28 bg-muted/30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-10 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -219,7 +219,7 @@ export function SectorPage({ sector }: { sector: Sector }) {
             className="text-center mb-14"
           >
             <p className="text-red-brand font-semibold text-sm tracking-[0.2em] mb-4">WHY INVEST HERE</p>
-            <h2 className="font-display text-4xl md:text-5xl lg:text-3xl font-bold text-navy dark:text-white text-balance">
+            <h2 className="font-display text-2xl md:text-5xl lg:text-3xl font-bold text-navy dark:text-white text-balance">
               Why Investors Choose {sector.title}
             </h2>
           </motion.div>
@@ -237,7 +237,7 @@ export function SectorPage({ sector }: { sector: Sector }) {
                     <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-red-brand/10 flex-shrink-0">
                       <Sparkles className="h-5 w-5 text-red-brand" />
                     </div>
-                    <p className="text-navy dark:text-white  text-[15px] md:text-base leading-relaxed text-pretty">{reason}</p>
+                    <p className="text-navy dark:text-white  text-[13px] md:text-base leading-relaxed text-pretty">{reason}</p>
                   </div>
                 </Card>
               </motion.div>
@@ -248,7 +248,7 @@ export function SectorPage({ sector }: { sector: Sector }) {
 
       {/* CTA */}
       <section className="py-20 md:py-28 bg-white dark:bg-background">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-5xl mx-auto px-10 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
@@ -259,21 +259,29 @@ export function SectorPage({ sector }: { sector: Sector }) {
               <div className="absolute top-0 right-0 w-72 h-72 bg-red-brand rounded-full blur-3xl" />
             </div>
             <div className="relative">
-              <h2 className="font-display text-4xl md:text-5xl lg:text-3xl font-bold text-white mb-6 text-balance">
+              <h2 className="font-display text-2xl md:text-5xl lg:text-3xl font-bold text-white mb-6 text-balance">
                 {sector.cta}
               </h2>
-              <p className="text-white/85 text-md mb-8 max-w-2xl mx-auto text-pretty text-white/70">
+              <p className="text-white/85 text-sm mb-8 max-w-2xl mx-auto text-pretty text-white/70">
                 Join NovaYield today and let our AI-powered platform optimize your {sector.title.toLowerCase()} investments for maximum returns.
               </p>
-              <div className="flex flex-wrap gap-4 justify-center">
+             <div className="flex flex-wrap justify-center gap-4">
                 <Link href="/register">
-                  <Button size="lg" className="bg-red-brand hover:bg-red-dark text-white px-10 py-6 text-base font-semibold rounded-full shadow-2xl shadow-red-500/30 hover:scale-105 transition-all">
+                  <Button
+                    size="lg"
+                    className="w-[240px] bg-red-brand px-10 py-6 text-base font-semibold text-white rounded-full shadow-2xl shadow-red-500/30 hover:bg-red-dark hover:scale-105 transition-all"
+                  >
                     Get Started
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </Link>
+
                 <Link href="/#plans">
-                  <Button size="lg" variant="outline" className="glass text-white border-white/30 hover:bg-white/15 px-10 py-6 text-base font-semibold rounded-full transition-all hover:scale-105">
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="w-[240px] glass px-10 py-6 text-base font-semibold text-white border-white/30 rounded-full transition-all hover:bg-white/15 hover:scale-105"
+                  >
                     View Plans
                   </Button>
                 </Link>

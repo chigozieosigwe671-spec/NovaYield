@@ -135,7 +135,7 @@ export function AboutSection() {
   return (
     <section id="about" className="py-24 md:py-32 bg-white dark:bg-background relative overflow-hidden">
       <div className="absolute top-0 right-0 w-1/3 h-full bg-grid opacity-[0.03] mask-fade-b" />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+      <div className="max-w-7xl mx-auto px-10 sm:px-6 lg:px-8 relative">
         <div className="grid lg:grid-cols-2 gap-14 lg:gap-20 items-center">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
@@ -144,7 +144,7 @@ export function AboutSection() {
             transition={{ duration: 0.7 }}
           >
             <p className="text-red-brand font-semibold text-sm tracking-[0.2em] mb-4">ABOUT NOVAYIELD</p>
-            <h2 className="font-display text-4xl md:text-4xl font-bold text-navy dark:text-white mb-7 text-balance">
+            <h2 className="font-display text-3xl md:text-4xl font-bold text-navy dark:text-white mb-7 text-balance">
               Sustainable Strategy Based on AI
             </h2>
             <p className="text-muted-foreground text-sm sm:text-base lg:text-md leading-7 sm:leading-8 mb-5 px-2 sm:px-0">
@@ -240,7 +240,7 @@ export function AboutSection() {
 export function ServicesSection() {
   return (
     <section id="services" className="py-24 md:py-32 bg-muted/30 relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
+      <div className="max-w-7xl mx-auto px-10 sm:px-6 lg:px-8 ">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -248,7 +248,7 @@ export function ServicesSection() {
           className="text-left lg:text-center mb-16"
         >
           <p className="text-red-brand font-semibold text-sm tracking-[0.2em] mb-4  ">EXCELLENT SERVICES</p>
-          <h2 className=" font-display text-4xl md:text-5xl lg:text-4xl font-bold text-navy dark:text-white text-balance mb-5">
+          <h2 className=" font-display text-3xl md:text-5xl lg:text-4xl font-bold text-navy dark:text-white text-balance mb-5">
             Sectors of Interest
           </h2>
           <p className="text-muted-foreground text-md max-w-2xl mx-auto text-pretty ">
@@ -304,7 +304,7 @@ export function ServicesSection() {
 export function WhyChooseSection() {
   return (
     <section className="py-24 md:py-32 bg-white dark:bg-background relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-10 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -312,7 +312,7 @@ export function WhyChooseSection() {
           className="text-left lg:text-center mb-16"
         >
           <p className="text-red-brand font-semibold text-sm tracking-[0.2em] mb-4 ">WHY CHOOSE US</p>
-          <h2 className="font-display text-3xl md:text-5xl lg:text-4xl font-bold text-navy dark:text-white text-balance mb-5">
+          <h2 className="font-display text-2xl md:text-5xl lg:text-4xl font-bold text-navy dark:text-white text-balance mb-5">
             Why Choose NovaYield
           </h2>
           <p className="text-muted-foreground text-md max-w-2xl mx-auto text-pretty">
@@ -351,7 +351,7 @@ export function VideoSection() {
   return (
     <section className="py-24 md:py-32 bg-white dark:bg-background relative overflow-hidden">
       <div className="absolute inset-0 bg-grid opacity-[0.03]" />
-      <div className="max-w-3xl mx-auto px-4 sm:px-4 lg:px-6 relative">
+      <div className="max-w-3xl mx-auto px-10 sm:px-4 lg:px-6 relative">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -359,7 +359,7 @@ export function VideoSection() {
           className="text-center mb-12"
         >
           <p className="text-red-brand font-semibold text-sm tracking-[0.2em] mb-4 text-left lg:text-left">WATCH & LEARN</p>
-          <h2 className="text-left lg:text-left font-display text-4xl md:text-5xl lg:text-4xl font-bold text-navy dark:text-white text-balance mb-5">
+          <h2 className="text-left lg:text-left font-display text-2xl md:text-5xl lg:text-4xl font-bold text-navy dark:text-white text-balance mb-5">
             Build Your Financial Future With Smart Investments
           </h2>
           <p className="text-muted-foreground text-md max-w-3xl mx-auto text-pretty text-left lg:text-left">
@@ -406,7 +406,7 @@ export function StatsSection() {
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-500 rounded-full blur-3xl" />
       </div>
       <div className="absolute inset-0 bg-grid opacity-[0.04]" />
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative max-w-7xl mx-auto px-10 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -443,7 +443,7 @@ export function StatsSection() {
 export function CtaSection() {
   return (
     <section className="py-24 md:py-32 bg-muted/30">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto px-10 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
@@ -462,19 +462,27 @@ export function CtaSection() {
             <p className="text-white/70 text-md md:text-1xl mb-10 max-w-2xl mx-auto text-pretty">
               Join thousands of investors who are already earning daily profits through NovaYield's AI-powered investment platform. Register today and start your journey toward financial freedom.
             </p>
-            <div className="flex flex-wrap gap-4 justify-center">
-              <Link href="/register">
-                <Button size="lg" className="bg-red-brand hover:bg-red-dark text-white px-10 py-6 text-base font-semibold rounded-full shadow-2xl shadow-red-500/30 hover:scale-105 transition-all">
-                  Register Now
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-              </Link>
-              <Link href="/login">
-                <Button size="lg" variant="outline" className="glass text-white border-white/30 hover:bg-white/15 px-10 py-6 text-base font-semibold rounded-full transition-all hover:scale-105">
-                  Login
-                </Button>
-              </Link>
-            </div>
+           <div className="flex flex-wrap justify-center gap-4">
+            <Link href="/register">
+              <Button
+                size="lg"
+                className="w-[240px] bg-red-brand px-10 py-6 text-base font-semibold text-white rounded-full shadow-2xl shadow-red-500/30 hover:bg-red-dark hover:scale-105 transition-all"
+              >
+                Register Now
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </Link>
+
+            <Link href="/login">
+              <Button
+                size="lg"
+                variant="outline"
+                className="w-[240px] glass px-10 py-6 text-base font-semibold text-white border-white/30 rounded-full transition-all hover:bg-white/15 hover:scale-105"
+              >
+                Login
+              </Button>
+            </Link>
+          </div>
           </div>
         </motion.div>
       </div>

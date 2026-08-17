@@ -36,7 +36,7 @@ export function PlansSection() {
   return (
     <section id="plans" className="py-24 md:py-32 bg-white dark:bg-background relative overflow-hidden">
       <div className="absolute top-0 left-0 w-1/3 h-full bg-grid opacity-[0.03]" />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+      <div className="max-w-7xl mx-auto px-10 sm:px-6 lg:px-8 relative">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -44,7 +44,7 @@ export function PlansSection() {
           className="text-left lg:text-center mb-16"
         >
           <p className="text-red-brand font-semibold text-sm tracking-[0.2em] mb-4">INVESTMENT PLANS</p>
-          <h2 className="font-display text-4xl md:text-5xl lg:text-4xl font-bold text-navy dark:text-white text-balance mb-5">
+          <h2 className="font-display text-3xl md:text-5xl lg:text-4xl font-bold text-navy dark:text-white text-balance mb-5">
             Choose Your Investment Plan
           </h2>
           <p className="text-muted-foreground text-md max-w-2xl mx-auto text-pretty">
@@ -152,7 +152,7 @@ export function TestimonialsSection() {
 
   return (
     <section className="py-24 md:py-32 bg-muted/30 relative overflow-hidden">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-5xl mx-auto px-10 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -160,7 +160,7 @@ export function TestimonialsSection() {
           className="text-center mb-16"
         >
           <p className="text-red-brand font-semibold text-sm tracking-[0.2em] mb-4">TESTIMONIALS</p>
-          <h2 className="font-display text-3xl md:text-5xl lg:text-4xl font-bold text-navy dark:text-white text-balance">
+          <h2 className="font-display text-2xl md:text-5xl lg:text-4xl font-bold text-navy dark:text-white text-balance">
             What Our Investors Say
           </h2>
         </motion.div>
@@ -235,7 +235,7 @@ export function FaqSection() {
 
   return (
     <section id="faq" className="py-24 md:py-32 bg-white dark:bg-background">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-3xl mx-auto px-10 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -243,7 +243,7 @@ export function FaqSection() {
           className="text-left lg:text-center mb-16"
         >
           <p className="text-red-brand font-semibold text-sm tracking-[0.2em] mb-4">FAQ</p>
-          <h2 className="font-display text-4xl md:text-5xl lg:text-4xl font-bold text-navy dark:text-white text-balance">
+          <h2 className="font-display text-3xl md:text-5xl lg:text-4xl font-bold text-navy dark:text-white text-balance">
             Frequently Asked Questions
           </h2>
         </motion.div>

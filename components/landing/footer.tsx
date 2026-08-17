@@ -43,7 +43,7 @@ export function Footer() {
       <div className="absolute inset-0 bg-grid opacity-[0.03]" />
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-red-brand/5 rounded-full blur-3xl" />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+      <div className="relative max-w-7xl mx-auto px-10 sm:px-6 lg:px-8 py-20">
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-10">
           <div className="col-span-2 lg:col-span-2">
             <div className="mb-5">
